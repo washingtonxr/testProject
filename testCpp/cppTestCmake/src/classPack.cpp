@@ -293,6 +293,18 @@ class B_Public : public A_Common {
         }
 };
 
+/*
+ *  ============Access control and inheritance============
+ *  ------------------------------------------------------
+ *  | Access        |  public  |  protected  |  private  |
+ *  ------------------------------------------------------
+ *  | Same Class    |  yes     |  yes        |  yes      |
+ *  ------------------------------------------------------
+ *  | Drived class  |  yes     |  yes        |  no       |
+ *  ------------------------------------------------------
+ *  | Outside class |  yes     |  no         |  no       |
+ *  ------------------------------------------------------
+ */
 int publicInheritance(void)
 {
     B_Public b(10);
