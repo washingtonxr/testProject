@@ -253,6 +253,7 @@ int protectClass(void)
     return 0;
 }
 
+// 基类
 class A_Common{
     public:
         int a;
@@ -275,6 +276,8 @@ class A_Common{
     private:
         int a3;
 };
+
+// 派生类
 class B_Public : public A_Common {
     public:
         int a;
