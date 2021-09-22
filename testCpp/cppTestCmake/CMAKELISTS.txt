@@ -1,0 +1,61 @@
+cmake_minimum_required(VERSION 3.5.0)
+#cmakedefine USE_xxx
+
+## Set parameter of project
+# set the project name 
+project(cppTest VERSION 1.0)
+# specify the C++ standard 
+set(CMAKE_CXX_STANDARD 11) 
+set(CMAKE_CXX_STANDARD_REQUIRED True) 
+set(AUTHOR "WASHINGOTN RUAN") 
+set(SOURCECODE_DIR "${PROJECT_BINARY_DIR}/../src/")
+set(HEADER_DIR "${PROJECT_BINARY_DIR}/../include/")
+set(PROJECT "cppTest")
+#set(PROJECT_SOURCE_DIR "${SOURCECODE_DIR}")
+
+# configure_file的作用将一份文件拷贝到另一个位置并修改它的内容，使得在代码中使用CMake中定义的变量 
+# configure_file官方文档：https://cmake.org/cmake/help/latest/command/configure_file.html 
+#configure_file(cppTest.h.in main.h)
+
+# set debug flags
+add_definitions(
+    -DTWDP_MEMPOOL_DEBUG        #enable mempool debug
+    -DTWDP_MALLOC_DEBUG         #enable malloc/free debug
+)
+
+## Set compile information.
+# enable debug mode
+set(ModeOption -O0)
+# set error flags
+set(WERROR_FLAGS -W -Wall -g)
+# set compiler flags
+set(CFLAGS -pthread ${CFLAGS} ${ModeOption} ${WERROR_FLAGS})
+add_compile_options(${CFLAGS})
+
+#add_subdirectory()
+#add_library(L2ScheDl ${DIR_LIB_SRCS})
+if (CMAKE_BUILD_TYPE STREQUAL DEBUG)
+    add_definitions(-DDEBUG)
+endif()
+
+# print some information.
+message(STATUS "PROJECT_SOURCE_DIR = ${PROJECT_SOURCE_DIR}")
+message(STATUS "PROJECT_BINARY_DIR = ${PROJECT_BINARY_DIR}")
+message(STATUS "AUTHOR = ${AUTHOR}")
+message(STATUS "SOURCECODE_DIR = ${SOURCECODE_DIR}")
+message(STATUS "HEADER_DIR = ${HEADER_DIR}")
+message(STATUS "DIR_LIB_SRCS = ${DIR_LIB_SRCS}")
+message(STATUS "SOURCECODE_DIR = ${SOURCECODE_DIR}")
+
+# add source file directory.
+include_directories(${HEADER_DIR})
+aux_source_directory(./src DIR_LIB_SRCS)
+
+# add the executable.
+add_executable(${PROJECT} ${DIR_LIB_SRCS})
+
+# 指定项目编译的时候需要include的文件路径，PROJECT_BINARY_DIR变量为编译发生的目录，也就是make执行的目录，PROJECT_SOURCE_DIR为工程所在的目录 
+# target_include_directories官方文档：https://cmake.org/cmake/help/v3.3/command/target_include_directories.html 
+#target_include_directories(cppTest PUBLIC "${PROJECT_BINARY_DIR}" ) 
+
+# End of this file.
