@@ -80,6 +80,7 @@ int main(int argc, char **argv)
     thisInlineFunction();
     thisPointer();
     thisPointer2();
+    pointerPointToClass();
 
     return 0;
 }

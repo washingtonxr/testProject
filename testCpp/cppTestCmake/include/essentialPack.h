@@ -53,6 +53,8 @@ int relationalOperator(void);
 int arithemeticOperator(void);
 
 int thisInlineFunction(void);
+int pointerPointToClass(void);
+
 
 #endif
 /* End of this file. */
