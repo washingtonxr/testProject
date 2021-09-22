@@ -535,43 +535,52 @@ int thisPointer2(void)
 class BoxPointer
 {
     public:
-    // 构造函数定义
-    BoxPointer(double l=2.0, double b=2.0, double h=2.0)
-    {
-        cout <<"Constructor called." << endl;
-        length = l;
-        breadth = b;
-        height = h;
-    }
-    double Volume()
-    {
-        return length * breadth * height;
-    }
+        static int objectCount;
+        // 构造函数定义
+        BoxPointer(double l=2.0, double b=2.0, double h=2.0)
+        {
+            cout <<"Constructor called." << endl;
+            length = l;
+            breadth = b;
+            height = h;
+            objectCount++;
+        }
+        double Volume()
+        {
+            return length * breadth * height;
+        }
+        static int getCount()
+        {
+            return objectCount;
+        }
     private:
         double length;     // Length of a box
         double breadth;    // Breadth of a box
         double height;     // Height of a box
 };
 
+int BoxPointer::objectCount = 0;
+
 int pointerPointToClass(void)
 {
-   BoxPointer Box1(3.3, 1.2, 1.5);    // Declare box1
-   BoxPointer Box2(8.5, 6.0, 2.0);    // Declare box2
-   BoxPointer *ptrBox;                // Declare pointer to a class.
+    BoxPointer Box1(3.3, 1.2, 1.5);    // Declare box1
+    BoxPointer Box2(8.5, 6.0, 2.0);    // Declare box2
+    BoxPointer *ptrBox;                // Declare pointer to a class.
 
-   // 保存第一个对象的地址
-   ptrBox = &Box1;
+    // 保存第一个对象的地址
+    ptrBox = &Box1;
 
-   // 现在尝试使用成员访问运算符来访问成员
-   cout << "Volume of Box1: " << ptrBox->Volume() << endl;
+    // 现在尝试使用成员访问运算符来访问成员
+    cout << "Volume of Box1: " << ptrBox->Volume() << endl;
+    cout << "objectCount of Box1: " << ptrBox->getCount() << endl;
 
-   // 保存第二个对象的地址
-   ptrBox = &Box2;
+    // 保存第二个对象的地址
+    ptrBox = &Box2;
 
-   // 现在尝试使用成员访问运算符来访问成员
-   cout << "Volume of Box2: " << ptrBox->Volume() << endl;
-  
-   return 0;
+    // 现在尝试使用成员访问运算符来访问成员
+    cout << "Volume of Box2: " << ptrBox->Volume() << endl;
+    cout << "objectCount of Box2: " << ptrBox->objectCount << endl;
+    return 0;
 }
 
 
