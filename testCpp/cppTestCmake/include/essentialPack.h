@@ -58,6 +58,7 @@ int multiStatusFunction(void);
 int tryAndCatch(void);
 int errorAndException(void);
 int dynamicMemory(void);
+int thisNamespace(void);
 
 #endif
 /* End of this file. */
