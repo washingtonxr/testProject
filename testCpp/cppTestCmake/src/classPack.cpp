@@ -32,6 +32,14 @@ class Box
             box.height = this->height + b.height;
             return box;
         }
+        Box operator*(const Box& b)
+        {
+            Box box;
+            box.length = this->length * b.length;
+            box.breadth = this->breadth * b.breadth;
+            box.height = this->height * b.height;
+            return box;
+        }
 };
 
 class BigBox
@@ -113,7 +121,14 @@ int testClass(void)
 
     // Box5 的体积
     volume = Box5.getVolume();
-    cout << "Volume of Box3 : " << volume << endl;
+    cout << "Volume of Box5 : " << volume << endl;
+
+
+    Box5 = Box1 * Box2;
+    // Box5 的体积
+    volume = Box5.getVolume();
+    cout << "Volume of Box5 : " << volume << endl;
+
     return 0;
 }
 
@@ -647,6 +662,65 @@ int reloadFunction(void)
    char c[] = "Hello C++";
    pd.print(c);
  
+   return 0;
+}
+
+class Shape {
+   protected:
+      int width, height;
+   public:
+      Shape( int a=0, int b=0)
+      {
+         width = a;
+         height = b;
+      }
+#if 0
+      virtual int area()
+      {
+         cout << "Parent class area :" <<endl;
+         return 0;
+      }
+#else
+    virtual int area() = 0;
+#endif
+};
+
+class Rectangle: public Shape{
+   public:
+      Rectangle( int a=0, int b=0):Shape(a, b) { }
+      int area ()
+      { 
+         cout << "Rectangle class area :" <<endl;
+         return (width * height); 
+      }
+};
+class Triangle: public Shape{
+   public:
+      Triangle( int a=0, int b=0):Shape(a, b) { }
+      int area ()
+      { 
+         cout << "Triangle class area :" <<endl;
+         return (width * height / 2); 
+      }
+};
+
+// 程序的主函数
+int multiStatusFunction(void)
+{
+   Shape *shape;
+   Rectangle rec(10,7);
+   Triangle  tri(10,5);
+ 
+   // 存储矩形的地址
+   shape = &rec;
+   // 调用矩形的求面积函数 area
+   shape->area();
+ 
+   // 存储三角形的地址
+   shape = &tri;
+   // 调用三角形的求面积函数 area
+   shape->area();
+   
    return 0;
 }
 

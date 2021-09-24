@@ -54,7 +54,7 @@ int arithemeticOperator(void);
 
 int thisInlineFunction(void);
 int pointerPointToClass(void);
-
+int multiStatusFunction(void);
 
 #endif
 /* End of this file. */

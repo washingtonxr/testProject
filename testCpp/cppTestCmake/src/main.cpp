@@ -82,6 +82,7 @@ int main(int argc, char **argv)
     thisPointer2();
     pointerPointToClass();
     reloadFunction();
+    multiStatusFunction();
 
     return 0;
 }
