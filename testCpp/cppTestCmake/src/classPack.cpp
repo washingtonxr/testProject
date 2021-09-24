@@ -17,6 +17,21 @@ class Box
         friend void printWidth( Box box );
         void setWidth( double wid );
         friend class BigBox;
+
+        double getVolume(void)
+        {
+            return length * breadth * height;
+        }
+
+        // 重载 + 运算符，用于把两个 Box 对象相加
+        Box operator+(const Box& b)
+        {
+            Box box;
+            box.length = this->length + b.length;
+            box.breadth = this->breadth + b.breadth;
+            box.height = this->height + b.height;
+            return box;
+        }
 };
 
 class BigBox
@@ -61,6 +76,7 @@ int testClass(void)
     Box Box2;        // 声明 Box2，类型为 Box
     Box Box3;        // 声明 Box3，类型为 Box
     Box Box4;        // 声明 Box4，类型为 Box
+    Box Box5;        // 声明 Box5，类型为 Box
     BigBox big;
     double volume = 0.0;     // 用于存储体积
 
@@ -93,6 +109,11 @@ int testClass(void)
     printWidth(Box4);
     big.Print(20, Box4);
 
+    Box5 = Box1 + Box2;
+
+    // Box5 的体积
+    volume = Box5.getVolume();
+    cout << "Volume of Box3 : " << volume << endl;
     return 0;
 }
 
