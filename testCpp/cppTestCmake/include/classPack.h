@@ -13,6 +13,7 @@ int copyConstructFunction(void);
 int copyConstructFunction2(void);
 int thisPointer(void);
 int thisPointer2(void);
+int reloadFunction(void);
 
 #endif
 /* End of this file. */

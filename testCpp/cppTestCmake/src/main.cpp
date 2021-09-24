@@ -81,6 +81,7 @@ int main(int argc, char **argv)
     thisPointer();
     thisPointer2();
     pointerPointToClass();
+    reloadFunction();
 
     return 0;
 }
