@@ -84,6 +84,7 @@ int main(int argc, char **argv)
     reloadFunction();
     multiStatusFunction();
     tryAndCatch();
+    errorAndException();
 
     return 0;
 }

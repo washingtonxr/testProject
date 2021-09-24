@@ -56,6 +56,7 @@ int thisInlineFunction(void);
 int pointerPointToClass(void);
 int multiStatusFunction(void);
 int tryAndCatch(void);
+int errorAndException(void);
 
 #endif
 /* End of this file. */

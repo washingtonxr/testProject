@@ -749,4 +749,29 @@ int tryAndCatch(void)
     return 0;
 }
 
+struct MyException : public exception
+{
+    const char * what () const throw ()
+    {
+        return "C++ Exception";
+    }
+};
+
+int errorAndException(void)
+{
+    try
+    {
+        throw MyException();
+    }
+    catch(MyException& e)
+    {
+        std::cout << "MyException caught" << std::endl;
+        std::cout << e.what() << std::endl;
+    }
+    catch(std::exception& e)
+    {
+    //其他的错误
+    }
+}
+
 /* End of this file. */
