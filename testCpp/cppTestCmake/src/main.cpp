@@ -87,6 +87,7 @@ int main(int argc, char **argv)
     errorAndException();
     dynamicMemory();
     thisNamespace();
+    thisAssert();
 
     return 0;
 }

@@ -1178,4 +1178,11 @@ int relationalOperator(void)
     return 0;
 }
 
+int thisAssert(void)
+{
+   static_assert(4 <= sizeof(int),"siz eof(int) too small");
+   //static_assert(0,"siz eof(int) too small");
+   return 0;
+}
+
 /* End of this file. */

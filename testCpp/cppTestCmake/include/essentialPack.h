@@ -59,6 +59,7 @@ int tryAndCatch(void);
 int errorAndException(void);
 int dynamicMemory(void);
 int thisNamespace(void);
+int thisAssert(void);
 
 #endif
 /* End of this file. */
