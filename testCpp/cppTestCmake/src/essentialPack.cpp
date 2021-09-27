@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iomanip>
+#include <cassert>
 #include "essentialPack.h"
 
 using namespace std;
@@ -1182,6 +1183,8 @@ int thisAssert(void)
 {
    static_assert(4 <= sizeof(int),"siz eof(int) too small");
    //static_assert(0,"siz eof(int) too small");
+   assert(1);
+   //assert(0);
    return 0;
 }
 
