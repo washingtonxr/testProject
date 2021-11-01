@@ -141,3 +141,10 @@ JUST CAT    ${mac_address}
 EOF
 
 
+valuetest0="123"
+if [ -n "$valuetest0" ]
+then
+	echo "valuetest0 is good "$valuetest0""
+else
+	echo "sizeof valuetest0 is 0"
+fi
