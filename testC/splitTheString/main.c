@@ -6,29 +6,28 @@
 int main(int argc, char *argv)
 {
     char cBuffer[] = "this is washington ruan test code @ 2021";
+    const char pDelimiter = ' ';
 #if 0
-    char *pBuffer[MAX_DEPTH] = {NULL};
-    char *p = NULL;
-    int i = 0;
+    char *pBuffer[MAX_DEPTH] = {0};
+    char *pStringSpiltCurrentPrt = NULL;
+    unsigned int ulLoop1 = 0;
 
-    printf("Sting: %s\n", pString);
+    printf("Sting: %s\n", cBuffer);
     /*
     分割同一字符串，第一次调用时传入字符串的首地址，第二个参数是分割符
     这里的分割符是空格，假如 buf = "hello;world;123"，你还可以按照 ";" 来分割buf
     此时第二个参数就填写 ";"
     */
-    p = strtok(pString, " ");
-    while(NULL != p) {
-        pBuffer[i] = p;
-        ++i;
-        // 再次调用分割时指针要变为NULL, 也就是这里的第一个参数，分割的字符串还是str
-        // 第二个参数要和第一次调用时的分割符保持一致
-        p = strtok(NULL, " ");
+    pStringSpiltCurrentPrt = strtok(cBuffer, &pDelimiter);
+    while(NULL != pStringSpiltCurrentPrt) {
+        pBuffer[ulLoop1] = pStringSpiltCurrentPrt;
+        ulLoop1++;
+        pStringSpiltCurrentPrt = strtok(NULL, &pDelimiter);
     }
 
-    for (i = 0; i < MAX_DEPTH - 1; ++i) {
-        if (NULL != pBuffer[i]) {
-            printf("%s\n", pBuffer[i]);
+    for (ulLoop1 = 0; ulLoop1 < MAX_DEPTH - 1; ulLoop1++) {
+        if (NULL != pBuffer[ulLoop1]) {
+            printf(">>>%s\n", pBuffer[ulLoop1]);
         }
     }
 
@@ -37,7 +36,6 @@ int main(int argc, char *argv)
     char pSplitBuffer[32][64] = {0, };
     char *pStringSpiltHeadPrt = NULL;
     char *pStringSpiltCurrentPrt = NULL;
-    const char pDelim = 0x20;
     unsigned char ucLoop1 = 0;
     unsigned char ucLoop2 = 0;
     unsigned char ucAccumulative = 0;
@@ -50,7 +48,7 @@ int main(int argc, char *argv)
     for (ucLoop1 = 0; ucLoop1 < strlen(cBuffer) + 1; ucLoop1++) {
         ucAccumulative++;
         pStringSpiltCurrentPrt = &cBuffer[ucLoop1];
-        if (pDelim == *pStringSpiltCurrentPrt) {
+        if (pDelimiter == *pStringSpiltCurrentPrt) {
             memcpy(pSplitBuffer[ucLoop2], pStringSpiltHeadPrt, ucAccumulative);
             printf("%s - %d\n", pSplitBuffer[ucLoop2], ucLoop1);
             pStringSpiltHeadPrt = pStringSpiltCurrentPrt + 1;
