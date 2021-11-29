@@ -5,6 +5,7 @@
 #include "essentialPack.h"
 #include "algorithmPack.h"
 #include "classPack.h"
+#include "modulePack.h"
 
 #endif
 /* End of this file. */

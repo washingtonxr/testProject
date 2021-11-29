@@ -89,6 +89,9 @@ int main(int argc, char **argv)
     thisNamespace();
     thisAssert();
 
+    /* Logic module test block. */
+    slRunCarFactoryModule();
+
     return 0;
 }
 

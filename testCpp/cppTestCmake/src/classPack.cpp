@@ -772,6 +772,7 @@ int errorAndException(void)
     {
     //其他的错误
     }
+    return 0;
 }
 
 int dynamicMemory(void)
