@@ -91,6 +91,7 @@ int main(int argc, char **argv)
 
     /* Logic module test block. */
     slRunCarFactoryModule();
+    slRunMealFactoryModule();
 
     return 0;
 }

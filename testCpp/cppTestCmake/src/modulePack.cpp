@@ -35,4 +35,46 @@ int slRunCarFactoryModule(void)
     return 0;
 }
 
+int slRunMealFactoryModule(void)
+{
+    classMealBuilder *pCook = new classMealBuilder;
+    classMealCombo *pMeal;
+    int choice;
+
+    // Prompt user for their meal choice
+    cout << "Select a meal: " << endl;
+    cout << "1: Hamburger Meal" << endl;
+    cout << "2: Hotdog Meal" << endl;
+    cout << "Selection: ";
+    cin >> choice;
+    cout << endl;
+
+    // Instantiate the appropriate builder based on user input
+    switch (choice)
+    {
+    case 1:
+        cout << "You chose Hamburger Meal. " << endl;
+        pCook = new classBurgerMeal;
+        break;
+    case 2:
+        cout << "You chose Hotdog Meal. " << endl;
+        pCook = new classHotdogMeal;
+        break;
+    default:
+        cout << "Invalid Selection" << endl;
+        pCook = NULL;
+        break;
+    }
+
+    cout << "Making selected meal" << endl;
+
+    // Build the complex object
+    pCook->cookEntree();
+    pCook->cookSide();
+    pCook->fillDrink();
+    pMeal = pCook->getMeal();
+    cout << pMeal->openMealBag() << endl;
+
+    return 0;
+}
 /* End of this file. */
