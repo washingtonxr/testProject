@@ -17,7 +17,33 @@ std::recursive_mutex recrusiveMutexLock;
 //std::shared_mutex shareMutexLock;
 
 unsigned int ulCommonValue = 0;
+
 #if 0 /* Only std-17 support shared mutex. */
+/* Demostation of deadlock. */
+static void deadLockCallback(std::mutex &lock1, std::mutex &lock2) {
+    while (0 < ulCommonValue) {
+        std::scoped_lock lock(lock1, lock2);
+        if (ulCommonValue) {
+            ulCommonValue--;
+        }
+    }
+    return;
+}
+
+static int deadLockTask(void) {
+    std::mutex lock1, lock2;
+
+    std::thread task1(deadLockCallback, std::ref(lock1), std::ref(lock2));
+    std::thread task2(deadLockCallback, std::ref(lock1), std::ref(lock2));
+
+    task1.join();
+    task2.join();
+
+    printf("deadLockTask is done.\n");
+    return 0;
+}
+
+/* Demosration for shared mutex. */
 const char WEEKDAYS[7][10] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 int slToday = 0;
 
@@ -38,6 +64,30 @@ static void calendarWrite(const int slId) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         shareMutexLock.unlock();        
     }
+}
+
+static int multiThreadForCanlendar(void) {
+    unsigned int ulLoop = 0;
+    // create ten reader threads ...but only two writer threads
+    std::array<std::thread, 10> threadReader;
+    std::array<std::thread, 2> threadWriter;
+
+    for (ulLoop = 0; ulLoop < threadReader.size(); ulLoop++) {
+        threadReader[ulLoop] = std::thread(calendarRead, ulLoop);
+    }
+
+    for (ulLoop = 0; ulLoop < threadWriter.size(); ulLoop++) {
+        threadWriter[ulLoop] = std::thread(calendarWrite, ulLoop);
+    }
+
+    // wait for readers and writers to finish
+    for (ulLoop = 0; ulLoop < threadReader.size(); ulLoop++) {
+        threadReader[ulLoop].join();
+    }
+    for (ulLoop = 0; ulLoop < threadWriter.size(); ulLoop++) {
+        threadWriter[ulLoop].join();
+    }
+    return 0;
 }
 #endif
 
@@ -120,32 +170,6 @@ static void justATask(void) {
     std::cout << "I am done!" << std::endl;
 }
 
-#if 0 /* Only std-17 support shared mutex. */
-static int multiThreadForCanlendar(void) {
-    unsigned int ulLoop = 0;
-    // create ten reader threads ...but only two writer threads
-    std::array<std::thread, 10> threadReader;
-    std::array<std::thread, 2> threadWriter;
-
-    for (ulLoop = 0; ulLoop < threadReader.size(); ulLoop++) {
-        threadReader[ulLoop] = std::thread(calendarRead, ulLoop);
-    }
-
-    for (ulLoop = 0; ulLoop < threadWriter.size(); ulLoop++) {
-        threadWriter[ulLoop] = std::thread(calendarWrite, ulLoop);
-    }
-
-    // wait for readers and writers to finish
-    for (ulLoop = 0; ulLoop < threadReader.size(); ulLoop++) {
-        threadReader[ulLoop].join();
-    }
-    for (ulLoop = 0; ulLoop < threadWriter.size(); ulLoop++) {
-        threadWriter[ulLoop].join();
-    }
-    return 0;
-}
-#endif
-
 int testMultiThread(void) {
     /* Multiple threads test. */
     std::thread subTask1(justATask);
@@ -198,6 +222,7 @@ int testMultiThread(void) {
 
 #if 0 /* Only std-17 support shared mutex. */
     multiThreadForCanlendar();
+    deadLockTask();
 #endif
 
     return 0;
