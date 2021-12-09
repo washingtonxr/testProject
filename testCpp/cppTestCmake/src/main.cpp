@@ -1,13 +1,11 @@
 #include "main.h"
 
-using namespace std;
-
 int main(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
 
-    cout << "hello world!" << endl;
+    std::cout << "hello world!" << std::endl;
 
     /* Algorithm function exmaple. */
     lookUpPrimeNumbers();
@@ -92,6 +90,9 @@ int main(int argc, char **argv)
     /* Logic module test block. */
     slRunCarFactoryModule();
     slRunMealFactoryModule();
+
+    /* Multiple thread block. */
+    testMultiThread();
 
     return 0;
 }

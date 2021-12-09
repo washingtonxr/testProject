@@ -5,7 +5,14 @@
 
 //#include <stdio.h>
 //#include <unistd.h>
-void justATask() {
+void detachTask(void) {
+    while (true) {
+        std::cout << "This is a deamon thread for testing." << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+}
+
+void justATask(void) {
     std::cout << "This is a sub-task for testing." << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(5));
     std::cout << "I am done!" << std::endl;
@@ -13,11 +20,16 @@ void justATask() {
 
 int testMultiThread(void) {
     /* Multiple threads test. */
-    std::thread subTask(justATask);
+    std::thread subTask1(justATask);
     //subTask = std::thread(justATask);
-    std::cout << "This thread is joinable? " << subTask.joinable() << std::endl;
+    std::cout << "This thread is joinable? " << subTask1.joinable() << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(3));
-    subTask.join();
+    subTask1.join();
+
+    std::thread subTask2(detachTask);
+    std::cout << "This thread is joinable? " << subTask2.joinable() << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    subTask2.join();
 
     return 0;
 }
