@@ -18,6 +18,35 @@ std::recursive_mutex recrusiveMutexLock;
 
 unsigned int ulCommonValue = 0;
 
+static void livelockCallback(std::mutex &lock1, std::mutex &lock2) {
+    while (ulCommonValue > 0) {
+        lock1.lock();
+        if (!lock2.try_lock()) {
+            lock1.unlock();
+            std::this_thread::yield();
+        } else {
+            if (ulCommonValue) {
+                ulCommonValue--;
+            }
+            lock2.unlock();
+            lock1.unlock();
+        }
+    }
+}
+
+static int livelockTask(void) {
+    std::mutex lock1, lock2;
+    ulCommonValue = 100;
+    std::thread task1(livelockCallback, std::ref(lock1), std::ref(lock2));
+    std::thread task2(livelockCallback, std::ref(lock1), std::ref(lock2));
+    std::thread task3(livelockCallback, std::ref(lock1), std::ref(lock2));
+    std::thread task4(livelockCallback, std::ref(lock1), std::ref(lock2));
+    task1.join();
+    task2.join();
+    task3.join();
+    task4.join();
+    printf("The livelock is done.\n");
+}
 #if 0 /* Only std-17 support shared mutex. */
 /* Demostation of deadlock. */
 static void deadLockCallback(std::mutex &lock1, std::mutex &lock2) {
@@ -224,6 +253,7 @@ int testMultiThread(void) {
     multiThreadForCanlendar();
     deadLockTask();
 #endif
+    livelockTask();
 
     return 0;
 }
