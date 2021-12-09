@@ -2,15 +2,19 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+//#include <string>
+#include <numeric>
 
 //#include <stdio.h>
 //#include <unistd.h>
 void detachTask(void) {
-    unsigned char ucCounter = 0;
+    int ulCounter = 0;
     while (true) {
-        std::cout << "This is a deamon thread for testing." << std::endl;
+        //std::string s(1, ucCounter);
+        //std::cout << s << std::endl;
+        std::cout << "This is a deamon thread for testing(" << ulCounter << ")." << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
-        if (3 <= ucCounter++) {
+        if (3 <= ulCounter++) {
             return;
         }
     }
