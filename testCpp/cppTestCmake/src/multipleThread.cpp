@@ -6,6 +6,7 @@
 #include <numeric>
 #include <mutex>
 #include <atomic>
+//#include <shared_mutex>
 
 #include <stdio.h>
 //#include <stdio.h>
@@ -13,7 +14,32 @@
 std::mutex mutexLock;
 std::atomic<unsigned int> atomicCounter(0);
 std::recursive_mutex recrusiveMutexLock;
+//std::shared_mutex shareMutexLock;
+
 unsigned int ulCommonValue = 0;
+#if 0 /* Only std-17 support shared mutex. */
+const char WEEKDAYS[7][10] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+int slToday = 0;
+
+static void calendarRead(const int slId) {
+    for (int i=0; i<7; i++) {
+        shareMutexLock.lock_shared();
+        printf("Reader-%d sees today is %s\n", slId, WEEKDAYS[slToday]);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		shareMutexLock.unlock_shared();	
+    }
+}
+
+static void calendarWrite(const int slId) {
+    for (int i=0; i<7; i++) {
+        shareMutexLock.lock();
+        slToday = (slToday + 1) % 7;
+        printf("Writer-%d updated date to %s\n", slId, WEEKDAYS[slToday]);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        shareMutexLock.unlock();        
+    }
+}
+#endif
 
 static void tryLockCallback(void) {
     int ulCounter = 0;
@@ -94,6 +120,32 @@ static void justATask(void) {
     std::cout << "I am done!" << std::endl;
 }
 
+#if 0 /* Only std-17 support shared mutex. */
+static int multiThreadForCanlendar(void) {
+    unsigned int ulLoop = 0;
+    // create ten reader threads ...but only two writer threads
+    std::array<std::thread, 10> threadReader;
+    std::array<std::thread, 2> threadWriter;
+
+    for (ulLoop = 0; ulLoop < threadReader.size(); ulLoop++) {
+        threadReader[ulLoop] = std::thread(calendarRead, ulLoop);
+    }
+
+    for (ulLoop = 0; ulLoop < threadWriter.size(); ulLoop++) {
+        threadWriter[ulLoop] = std::thread(calendarWrite, ulLoop);
+    }
+
+    // wait for readers and writers to finish
+    for (ulLoop = 0; ulLoop < threadReader.size(); ulLoop++) {
+        threadReader[ulLoop].join();
+    }
+    for (ulLoop = 0; ulLoop < threadWriter.size(); ulLoop++) {
+        threadWriter[ulLoop].join();
+    }
+    return 0;
+}
+#endif
+
 int testMultiThread(void) {
     /* Multiple threads test. */
     std::thread subTask1(justATask);
@@ -143,6 +195,10 @@ int testMultiThread(void) {
     tryLockTask2.join();
     tryLockTask3.join();
     tryLockTask4.join();
+
+#if 0 /* Only std-17 support shared mutex. */
+    multiThreadForCanlendar();
+#endif
 
     return 0;
 }
