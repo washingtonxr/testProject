@@ -54,6 +54,10 @@ aux_source_directory(./src DIR_LIB_SRCS)
 # add the executable.
 add_executable(${PROJECT} ${DIR_LIB_SRCS})
 
+# Find threads library.
+find_package (Threads)
+# Link threads library.
+target_link_libraries (${PROJECT} Threads::Threads)
 # 指定项目编译的时候需要include的文件路径，PROJECT_BINARY_DIR变量为编译发生的目录，也就是make执行的目录，PROJECT_SOURCE_DIR为工程所在的目录 
 # target_include_directories官方文档：https://cmake.org/cmake/help/v3.3/command/target_include_directories.html 
 #target_include_directories(cppTest PUBLIC "${PROJECT_BINARY_DIR}" ) 
