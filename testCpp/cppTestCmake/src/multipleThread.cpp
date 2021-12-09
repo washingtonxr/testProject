@@ -15,7 +15,24 @@ std::atomic<unsigned int> atomicCounter(0);
 std::recursive_mutex recrusiveMutexLock;
 unsigned int ulCommonValue = 0;
 
-void recursiveMutexCallback(void) {
+static void tryLockCallback(void) {
+    int ulCounter = 0;
+    while (1) {
+        if (mutexLock.try_lock()) {
+            printf("ulCommonValue = %d.\n", ulCommonValue);
+            //recrusiveMutexLock.lock();
+            ulCommonValue++;
+            mutexLock.unlock();
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            if (5 <= ulCounter++) {
+                return;
+            }
+        }
+    }
+    return;
+}
+
+static void recursiveMutexCallback(void) {
     int ulCounter = 0;
     while (true) {
         printf("ulCommonValue = %d.\n", ulCommonValue);
@@ -30,7 +47,7 @@ void recursiveMutexCallback(void) {
     return;
 }
 
-void atomicCallback(void) {
+static void atomicCallback(void) {
     int ulCounter = 0;
     while (true) {
         atomicCounter++;
@@ -43,7 +60,7 @@ void atomicCallback(void) {
     return;
 }
 
-void lockTask(void) {
+static void lockTask(void) {
     int ulCounter = 0;
     while (true) {
         std::cout << "This is a lock thread for testing(" << ulCounter << ")." << std::endl;
@@ -58,7 +75,7 @@ void lockTask(void) {
     return;
 }
 
-void detachTask(void) {
+static void detachTask(void) {
     int ulCounter = 0;
     while (true) {
         //std::string s(1, ucCounter);
@@ -71,7 +88,7 @@ void detachTask(void) {
     }
 }
 
-void justATask(void) {
+static void justATask(void) {
     std::cout << "This is a sub-task for testing." << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     std::cout << "I am done!" << std::endl;
@@ -118,7 +135,14 @@ int testMultiThread(void) {
     recrusiveMutexTask3.join();
     recrusiveMutexTask4.join();
 
-
+    std::thread tryLockTask1(tryLockCallback);
+    std::thread tryLockTask2(tryLockCallback);
+    std::thread tryLockTask3(tryLockCallback);
+    std::thread tryLockTask4(tryLockCallback);
+    tryLockTask1.join();
+    tryLockTask2.join();
+    tryLockTask3.join();
+    tryLockTask4.join();
 
     return 0;
 }
