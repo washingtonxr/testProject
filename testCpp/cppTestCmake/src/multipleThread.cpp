@@ -5,10 +5,26 @@
 //#include <string>
 #include <numeric>
 #include <mutex>
+#include <atomic>
 
+#include <stdio.h>
 //#include <stdio.h>
 //#include <unistd.h>
 std::mutex mutexLock;
+std::atomic<unsigned int> atomicCounter(0);
+
+void atomicCallback(void) {
+    int ulCounter = 0;
+    while (true) {
+        atomicCounter++;
+        printf("atomicCounter = %d.\n", atomicCounter.load());
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        if (5 <= ulCounter++) {
+            return;
+        }
+    }
+    return;
+}
 
 void lockTask(void) {
     int ulCounter = 0;
@@ -66,6 +82,15 @@ int testMultiThread(void) {
     subTask4.join();
     subTask5.join();
     subTask6.join();
+
+    std::thread atomicTask1(atomicCallback);
+    std::thread atomicTask2(atomicCallback);
+    std::thread atomicTask3(atomicCallback);
+    std::thread atomicTask4(atomicCallback);
+    atomicTask1.join();
+    atomicTask2.join();
+    atomicTask3.join();
+    atomicTask4.join();
 
     return 0;
 }
