@@ -4,9 +4,27 @@
 #include <chrono>
 //#include <string>
 #include <numeric>
+#include <mutex>
 
 //#include <stdio.h>
 //#include <unistd.h>
+std::mutex mutexLock;
+
+void lockTask(void) {
+    int ulCounter = 0;
+    while (true) {
+        std::cout << "This is a lock thread for testing(" << ulCounter << ")." << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        mutexLock.lock();
+        ulCounter++;
+        mutexLock.unlock();
+        if (5 <= ulCounter) {
+            return;
+        }
+    }
+    return;
+}
+
 void detachTask(void) {
     int ulCounter = 0;
     while (true) {
@@ -38,6 +56,16 @@ int testMultiThread(void) {
     std::cout << "This thread is joinable? " << subTask2.joinable() << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
     subTask2.join();
+
+    std::thread subTask3(lockTask);
+    std::thread subTask4(lockTask);
+    std::thread subTask5(lockTask);
+    std::thread subTask6(lockTask);
+
+    subTask3.join();
+    subTask4.join();
+    subTask5.join();
+    subTask6.join();
 
     return 0;
 }
