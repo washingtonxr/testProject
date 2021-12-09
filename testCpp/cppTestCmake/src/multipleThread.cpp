@@ -12,6 +12,23 @@
 //#include <unistd.h>
 std::mutex mutexLock;
 std::atomic<unsigned int> atomicCounter(0);
+std::recursive_mutex recrusiveMutexLock;
+unsigned int ulCommonValue = 0;
+
+void recursiveMutexCallback(void) {
+    int ulCounter = 0;
+    while (true) {
+        printf("ulCommonValue = %d.\n", ulCommonValue);
+        recrusiveMutexLock.lock();
+        ulCommonValue++;
+        recrusiveMutexLock.unlock();
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        if (5 <= ulCounter++) {
+            return;
+        }
+    }
+    return;
+}
 
 void atomicCallback(void) {
     int ulCounter = 0;
@@ -91,6 +108,17 @@ int testMultiThread(void) {
     atomicTask2.join();
     atomicTask3.join();
     atomicTask4.join();
+
+    std::thread recrusiveMutexTask1(recursiveMutexCallback);
+    std::thread recrusiveMutexTask2(recursiveMutexCallback);
+    std::thread recrusiveMutexTask3(recursiveMutexCallback);
+    std::thread recrusiveMutexTask4(recursiveMutexCallback);
+    recrusiveMutexTask1.join();
+    recrusiveMutexTask2.join();
+    recrusiveMutexTask3.join();
+    recrusiveMutexTask4.join();
+
+
 
     return 0;
 }
