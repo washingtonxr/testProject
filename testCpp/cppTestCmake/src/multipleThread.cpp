@@ -6,15 +6,19 @@
 //#include <stdio.h>
 //#include <unistd.h>
 void detachTask(void) {
+    unsigned char ucCounter = 0;
     while (true) {
         std::cout << "This is a deamon thread for testing." << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
+        if (3 <= ucCounter++) {
+            return;
+        }
     }
 }
 
 void justATask(void) {
     std::cout << "This is a sub-task for testing." << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     std::cout << "I am done!" << std::endl;
 }
 
@@ -23,7 +27,7 @@ int testMultiThread(void) {
     std::thread subTask1(justATask);
     //subTask = std::thread(justATask);
     std::cout << "This thread is joinable? " << subTask1.joinable() << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
     subTask1.join();
 
     std::thread subTask2(detachTask);

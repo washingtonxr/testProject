@@ -6,6 +6,7 @@
 #include "algorithmPack.h"
 #include "classPack.h"
 #include "modulePack.h"
+#include "multipleThread.h"
 
 #endif
 /* End of this file. */
