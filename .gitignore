@@ -1,0 +1,4 @@
+# Ignore python venv
+#*venv/
+testPython/aiProject/venv
+
