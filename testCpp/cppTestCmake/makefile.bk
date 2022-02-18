@@ -1,6 +1,0 @@
-build:all
-all:
-	g++ -o main main.cpp -W -Wall -g
-.PHONY:clean
-clean:
-	rm -rf main
