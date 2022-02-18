@@ -1,3 +1,6 @@
+
+#.NOTPARALLEL:all
+
 build:all
 
 
@@ -41,6 +44,8 @@ k:
 
 l:
 	./shell012.sh
+
+
 
 .PHONY:clean
 clean:
