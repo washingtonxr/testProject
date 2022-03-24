@@ -12,8 +12,8 @@ set(PROJECT "cTest")
 
 # set debug flags
 add_definitions(
-    -DTWDP_MEMPOOL_DEBUG        #enable mempool debug
-    -DTWDP_MALLOC_DEBUG         #enable malloc/free debug
+    -DTXDP_MEMPOOL_DEBUG        #enable mempool debug
+    -DTXDP_MALLOC_DEBUG         #enable malloc/free debug
 )
 
 ## Set compile information.
