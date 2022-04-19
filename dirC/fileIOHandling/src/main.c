@@ -157,13 +157,21 @@ int main()
 	sprintf(filename, "%s", TEST_FILE);
 
 	if (0 > checkFile(filename)) {
-		DEBUG_LOG("File %s exist.\n", filename);
+		DEBUG_LOG("File %s does not exist.\n", filename);
 	}
 
 	writeFile(filename, buf, strlen(buf));
 
 	memset(buf, 0, sizeof(buf));
 	readFile(filename, buf, 100);
+
+	if (0 == remove(filename)) {
+		DEBUG_LOG("File %s is removed!\n", filename);
+	}
+
+	if (0 > checkFile(filename)) {
+		DEBUG_LOG("File %s does not exist.\n", filename);
+	}
 
 	return 0;
 }
