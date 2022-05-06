@@ -63,8 +63,8 @@ def getSpecs(inputURL, inputPath):
     # Create a serials folder if the file does not exist.
     for i in list_File:
         print("Directory name:" + i)
-    #    if not os.path.exists("D:\\T&W[Jan.20th,2020-XXX.XXth,XXXX]\\Standards\\3GPP\\" + TSVERSION + "\\" + i):
-    #        os.makedirs("D:\\T&W[Jan.20th,2020-XXX.XXth,XXXX]\\Standards\\3GPP\\" + TSVERSION + "\\" + i)
+    #    if not os.path.exists("D:\\TEST[Jan.20th,2020-XXX.XXth,XXXX]\\Standards\\3GPP\\" + TSVERSION + "\\" + i):
+    #        os.makedirs("D:\\TEST[Jan.20th,2020-XXX.XXth,XXXX]\\Standards\\3GPP\\" + TSVERSION + "\\" + i)
         thisDirectory = TSFILE_PATH + TSVERSION + '/' + i
         if not os.path.exists(thisDirectory):
             print("Make directory:" + thisDirectory)
@@ -74,8 +74,11 @@ def getSpecs(inputURL, inputPath):
     #index = 0
     for remoteFileInfo in list_URL:
         print('Handling file:' + remoteFileInfo)
-        # D:\T&W[Jan.20th,2020-XXX.XXth,XXXX]\Standards\3GPP
-    #    os.chdir('D:/T&W[Jan.20th,2020-XXX.XXth,XXXX]/Standards/3GPP/' + TSVERSION + '/' + i.split('/')[-2])
+
+        # Require file name.
+        fileName = remoteFileInfo.split('/')[-1]
+        # D:\TEST[Jan.20th,2020-XXX.XXth,XXXX]\Standards\3GPP
+    #    os.chdir('D:/TEST[Jan.20th,2020-XXX.XXth,XXXX]/Standards/3GPP/' + TSVERSION + '/' + i.split('/')[-2])
 
         subDirectory = inputPath + TSFILE_PATH.split('.')[1] + TSVERSION + '/' + remoteFileInfo.split('/')[-2]
         print("Change to the directory:" + subDirectory)
@@ -87,9 +90,14 @@ def getSpecs(inputURL, inputPath):
             continue
         else:
             urllib.request.urlretrieve(remoteFileInfo, fileInfo, downloadStatistics)
-        # LocalPath = os.path.join('D:/T&W[Jan.20th,2020-XXX.XXth,XXXX]/Standards/3GPP/r15/', list_File[index])
+        # LocalPath = os.path.join('D:/TEST[Jan.20th,2020-XXX.XXth,XXXX]/Standards/3GPP/r15/', list_File[index])
         # index = index + 1
         # urllib.request.urlretrieve(i, LocalPath)
+
+        # Require file size.
+        fileSize = os.path.getsize(os.path.join(subDirectory, fileInfo))
+        # Change fileSize's unit to MB.
+        print('File size = %.2f Mb' % (fileSize/1024/1024))
 
     # TODO imports thread modules to enable multithreading to solve the problem of slow single-threaded downloads.
 

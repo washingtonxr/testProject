@@ -4,8 +4,6 @@ import os
 
 print('hello, world')
 print('hello, world2')
-print('hello, world3')
-print('hello, world4')
 
 def power(x):
     return x * x
@@ -25,4 +23,7 @@ currentPath = rootPath + TSFILE_PATH.split('.')[1] + '123.x'
 
 print(currentPath)
 
+TSFILE = "https://www.3gpp.org/ftp/Specs/latest/Rel-17/24_series/24606-h00.zip"
+fileName = TSFILE.split('/')[-1]
+print(fileName)
 
