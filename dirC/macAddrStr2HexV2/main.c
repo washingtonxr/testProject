@@ -32,6 +32,39 @@ unsigned char convertAsicc2Hex(const char ucElement)
     } while (0);
 
 /**
+ * @brief Convert MAC address from string to HEX.
+ *
+ * @param pVapAclInstance
+ * @param newObj
+ * @return CfgRet
+ */
+static void rts_LanWlanCovertMacFromStr2Hex(localVapACLInstance_t *pVapAclInstance, LanWlanObject *newObj)
+{
+    const char cDelimiter1[] = ",";
+    const char cDelimiter2[] = ":";
+    char* pToken1 = NULL;
+    char* pToken2 = NULL;
+    char* pPointer1 = NULL;
+    char* pPointer2 = NULL;
+    unsigned char ucCounterTemp = 0;
+
+    pToken1 = strtok_r(newObj->X_ALU_COM_DeniedMACAddresses, cDelimiter1, &pPointer1);
+    while (NULL != pToken1) {
+        DEBUG("pToken1: %s, MAC_num %d\n", pToken1, pVapAclInstance->ucMacNum);
+        pToken2 = strtok_r(pToken1, cDelimiter2, &pPointer2);
+        while (NULL != pToken2) {
+            DEBUG("pToken2: %s-%02X tmp_num %d\n", pToken2, strtol(pToken2, NULL, 16), ucCounterTemp);
+            pVapAclInstance->ucAclMacHexList[pVapAclInstance->ucMacNum][ucCounterTemp] = (unsigned char)strtol(pToken2, NULL, 16);
+            pToken2 = strtok_r(NULL, cDelimiter2, &pPointer2);
+            ucCounterTemp++;
+        }
+        pToken1 = strtok_r(NULL, cDelimiter1, &pPointer1);
+        pVapAclInstance->ucMacNum++;
+        ucCounterTemp = 0;
+    }
+}
+
+/**
  * @brief Handle MAC address converting.
  * 
  * @param pVapAclInstance 
@@ -61,7 +94,16 @@ static CfgRet rts_LanWlanHandleMacAddr(localVapACLInstance_t *pVapAclInstance, L
     }
 
     /* Get rid of "," out of string. */
-#if 0
+#if 1
+    printf("RAW:%s\n", newObj->X_ALU_COM_DeniedMACAddresses);
+    if ((0 == strcmp(newObj->X_ALU_COM_MACAddressControlMode, "Allow")) || (0 == strcmp(newObj->X_ALU_COM_MACAddressControlMode, "Deny"))) {
+        rts_LanWlanCovertMacFromStr2Hex(pVapAclInstance, newObj);
+    } else {
+        printf("Invalid mode %s.\n", newObj->X_ALU_COM_MACAddressControlMode);
+        return CFG_RET_FAIL;
+    }
+#if 1
+#else
     ucMacTemp = strtok(pVapAclInstance->cMACAddresses, ",");
     if (NULL != ucMacTemp)
     {
@@ -82,6 +124,7 @@ static CfgRet rts_LanWlanHandleMacAddr(localVapACLInstance_t *pVapAclInstance, L
     {
         printf("Mac addr list for DENY is empty.\n");
     }
+#endif
 #else
     /* Get rid of "," & ":" from string. */
     char *pStrElement = (char *)&pVapAclInstance->cMACAddresses;
