@@ -61,6 +61,8 @@ int dynamicMemory(void);
 int thisNamespace(void);
 int thisAssert(void);
 int essentialCheckVariableLength(bool bEnable);
+int essentialTypeConversion(bool bEnable);
+int essentialTestAllInOne(bool bEnable);
 
 #endif
 /* End of this file. */

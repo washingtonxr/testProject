@@ -7,6 +7,14 @@ int main(int argc, char **argv)
 
     std::cout << "hello world!" << std::endl;
 
+#if 1
+    /* Essential operator. */
+    essentialCheckVariableLength(true);
+    essentialTypeConversion(true);
+
+    essentialTestAllInOne(true);
+
+#else
     /* Algorithm function exmaple. */
     lookUpPrimeNumbers();
     linearSieveMethod();
@@ -25,6 +33,7 @@ int main(int argc, char **argv)
     nestedLoopOperator();
     breakOperator();
     essentialCheckVariableLength(true);
+
 #if 0
     infiniteLoopOperator();
 #endif
@@ -94,7 +103,7 @@ int main(int argc, char **argv)
 
     /* Multiple thread block. */
     testMultiThread();
-
+#endif
     return 0;
 }
 

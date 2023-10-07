@@ -1232,4 +1232,34 @@ int essentialCheckVariableLength(bool bEnable)
    return 0;
 }
 
+int essentialTypeConversion(bool bEnable)
+{
+   if (!bEnable) {
+      cout << "The function" << __FUNCTION__<< "is not enable."<< endl ;
+      return 0;
+   }
+
+   int i = 10;
+   float f = static_cast<float>(i); // 静态将int类型转换为float类型
+
+   cout << "f = "<< f << endl;
+
+   return 0;
+}
+
+int essentialTestAllInOne(bool bEnable)
+{
+   if (!bEnable) {
+      cout << "The function" << __FUNCTION__<< "is not enable."<< endl ;
+      return 0;
+   }
+
+   cout << "Function " <<__FUNCTION__<< "Line " <<__LINE__<<endl;
+
+   /* Test content */
+
+
+
+   return 0;
+}
 /* End of this file. */
