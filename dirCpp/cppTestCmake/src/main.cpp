@@ -24,6 +24,7 @@ int main(int argc, char **argv)
     doWhileOperator();
     nestedLoopOperator();
     breakOperator();
+    essentialCheckVariableLength(true);
 #if 0
     infiniteLoopOperator();
 #endif

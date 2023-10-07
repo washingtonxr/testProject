@@ -46,6 +46,7 @@ static int livelockTask(void) {
     task3.join();
     task4.join();
     printf("The livelock is done.\n");
+    return 0;
 }
 #if 0 /* Only std-17 support shared mutex. */
 /* Demostation of deadlock. */

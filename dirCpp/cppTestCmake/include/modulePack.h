@@ -216,7 +216,7 @@ private:
     classEntree *pEntree;
     classSide *pSide;
     classDrink *pDrink;
-    char cBag[100];
+    char cBag[128] = {0};
 
 public:
     classMealCombo(const char *pType)

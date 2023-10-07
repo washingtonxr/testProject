@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <cassert>
 #include "essentialPack.h"
+#include <limits>
 
 using namespace std;
 /////////////////////////////
@@ -154,14 +155,14 @@ int referenceAsParameter(void)
    int a = 100;
    int b = 200;
 
-   cout << "交换前，a 的值：" << a << endl;
-   cout << "交换前，b 的值：" << b << endl;
+   cout << "交换前，a 的值:" << a << endl;
+   cout << "交换前，b 的值:" << b << endl;
 
    /* 调用函数来交换值 */
    swap4(a, b);
 
-   cout << "交换后，a 的值：" << a << endl;
-   cout << "交换后，b 的值：" << b << endl;
+   cout << "交换后，a 的值:" << a << endl;
+   cout << "交换后，b 的值:" << b << endl;
 
    return 0;
 }
@@ -491,7 +492,7 @@ int passAnArrayToFunction(void)
    avg = getAverage( balance, 5 ) ;
 
    // 输出返回值
-   cout << "平均值是：" << avg << endl; 
+   cout << "平均值是:" << avg << endl; 
 
    return 0;
 }
@@ -573,7 +574,7 @@ int randomNumber(void)
    {
       // 生成实际的随机数
       j= rand();
-      cout <<"随机数： " << j << endl;
+      cout <<"随机数: " << j << endl;
    }
 
    return 0;
@@ -640,14 +641,14 @@ int referenceFunction(void)
    int a = 100;
    int b = 200;
 
-   cout << "交换前，a 的值：" << a << endl;
-   cout << "交换前，b 的值：" << b << endl;
+   cout << "交换前，a 的值:" << a << endl;
+   cout << "交换前，b 的值:" << b << endl;
 
    /* 调用函数来交换值 */
    swap3(a, b);
 
-   cout << "交换后，a 的值：" << a << endl;
-   cout << "交换后，b 的值：" << b << endl;
+   cout << "交换后，a 的值:" << a << endl;
+   cout << "交换后，b 的值:" << b << endl;
 
    return 0;
 }
@@ -668,8 +669,8 @@ int passPointerFunction(void)
    int a = 100;
    int b = 200;
 
-   cout << "交换前，a 的值：" << a << endl;
-   cout << "交换前，b 的值：" << b << endl;
+   cout << "交换前，a 的值:" << a << endl;
+   cout << "交换前，b 的值:" << b << endl;
 
    /* 调用函数来交换值
       * &a 表示指向 a 的指针，即变量 a 的地址 
@@ -677,8 +678,8 @@ int passPointerFunction(void)
       */
    swap2(&a, &b);
 
-   cout << "交换后，a 的值：" << a << endl;
-   cout << "交换后，b 的值：" << b << endl;
+   cout << "交换后，a 的值:" << a << endl;
+   cout << "交换后，b 的值:" << b << endl;
 
    return 0;
 }
@@ -713,14 +714,14 @@ int passValueFunction(void)
    int a = 100;
    int b = 200;
 
-   cout << "交换前，a 的值：" << a << endl;
-   cout << "交换前，b 的值：" << b << endl;
+   cout << "交换前，a 的值:" << a << endl;
+   cout << "交换前，b 的值:" << b << endl;
 
    // 调用函数来交换值
    swap1(a, b);
 
-   cout << "交换后，a 的值：" << a << endl;
-   cout << "交换后，b 的值：" << b << endl;
+   cout << "交换后，a 的值:" << a << endl;
+   cout << "交换后，b 的值:" << b << endl;
 
    return 0;
 }
@@ -856,7 +857,7 @@ int thisGotoOperator(void)
             a = a + 1;
             goto LOOP;
          }
-         cout << "a 的值：" << a << endl;
+         cout << "a 的值:" << a << endl;
          a = a + 1;
    }while( a < 20 );
 
@@ -877,7 +878,7 @@ int thisDoLoopOperator(void)
             a = a + 1;
             continue;
          }
-         cout << "a 的值：" << a << endl;
+         cout << "a 的值:" << a << endl;
          a = a + 1;
    }while( a < 20 );
 
@@ -904,7 +905,7 @@ int breakOperator(void)
    // do 循环执行
    do
    {
-         cout << "a 的值：" << a << endl;
+         cout << "a 的值:" << a << endl;
          a = a + 1;
          if( a > 15)
          {
@@ -940,7 +941,7 @@ int doWhileOperator(void)
    // do 循环执行
    do
    {
-      cout << "a 的值：" << a << endl;
+      cout << "a 的值:" << a << endl;
       a = a + 1;
    }while( a < 20 );
 
@@ -967,7 +968,7 @@ int forOperator(void)
    // while 循环执行
    while( a < 20 )
    {
-         cout << "a 的值：" << a << endl;
+         cout << "a 的值:" << a << endl;
          a++;
    }
 
@@ -1172,6 +1173,62 @@ int thisAssert(void)
    //static_assert(0,"siz eof(int) too small");
    assert(1);
    //assert(0);
+   return 0;
+}
+
+int essentialCheckVariableLength(bool bEnable)
+{
+   if (!bEnable) {
+      cout << "The function" << __FUNCTION__<< "is not enable."<< endl ;
+      return 0;
+   }
+
+   cout << "type: \t\t" << "************size**************"<< endl;
+   cout << "bool: \t\t" << "所占字节数:" << sizeof(bool);
+   cout << "\t最大值:" << (numeric_limits<bool>::max)();
+   cout << "\t\t最小值:" << (numeric_limits<bool>::min)() << endl;
+   cout << "char: \t\t" << "所占字节数:" << sizeof(char);
+   cout << "\t最大值:" << (numeric_limits<char>::max)();
+   cout << "\t\t最小值:" << (numeric_limits<char>::min)() << endl;
+   cout << "signed char: \t" << "所占字节数:" << sizeof(signed char);
+   cout << "\t最大值:" << (numeric_limits<signed char>::max)();
+   cout << "\t\t最小值:" << (numeric_limits<signed char>::min)() << endl;
+   cout << "unsigned char: \t" << "所占字节数:" << sizeof(unsigned char);
+   cout << "\t最大值:" << (numeric_limits<unsigned char>::max)();
+   cout << "\t\t最小值:" << (numeric_limits<unsigned char>::min)() << endl;
+   cout << "wchar_t: \t" << "所占字节数:" << sizeof(wchar_t);
+   cout << "\t最大值:" << (numeric_limits<wchar_t>::max)();
+   cout << "\t\t最小值:" << (numeric_limits<wchar_t>::min)() << endl;
+   cout << "short: \t\t" << "所占字节数:" << sizeof(short);
+   cout << "\t最大值:" << (numeric_limits<short>::max)();
+   cout << "\t\t最小值:" << (numeric_limits<short>::min)() << endl;
+   cout << "int: \t\t" << "所占字节数:" << sizeof(int);
+   cout << "\t最大值:" << (numeric_limits<int>::max)();
+   cout << "\t最小值:" << (numeric_limits<int>::min)() << endl;
+   cout << "unsigned: \t" << "所占字节数:" << sizeof(unsigned);
+   cout << "\t最大值:" << (numeric_limits<unsigned>::max)();
+   cout << "\t最小值:" << (numeric_limits<unsigned>::min)() << endl;
+   cout << "long: \t\t" << "所占字节数:" << sizeof(long);
+   cout << "\t最大值:" << (numeric_limits<long>::max)();
+   cout << "\t最小值:" << (numeric_limits<long>::min)() << endl;
+   cout << "unsigned long: \t" << "所占字节数:" << sizeof(unsigned long);
+   cout << "\t最大值:" << (numeric_limits<unsigned long>::max)();
+   cout << "\t最小值:" << (numeric_limits<unsigned long>::min)() << endl;
+   cout << "double: \t" << "所占字节数:" << sizeof(double);
+   cout << "\t最大值:" << (numeric_limits<double>::max)();
+   cout << "\t最小值:" << (numeric_limits<double>::min)() << endl;
+   cout << "long double: \t" << "所占字节数:" << sizeof(long double);
+   cout << "\t最大值:" << (numeric_limits<long double>::max)();
+   cout << "\t最小值:" << (numeric_limits<long double>::min)() << endl;
+   cout << "float: \t\t" << "所占字节数:" << sizeof(float);
+   cout << "\t最大值:" << (numeric_limits<float>::max)();
+   cout << "\t最小值:" << (numeric_limits<float>::min)() << endl;
+   cout << "size_t: \t" << "所占字节数:" << sizeof(size_t);
+   cout << "\t最大值:" << (numeric_limits<size_t>::max)();
+   cout << "\t最小值:" << (numeric_limits<size_t>::min)() << endl;
+   cout << "string: \t" << "所占字节数:" << sizeof(string) << endl;
+   // << "\t最大值:" << (numeric_limits<string>::max)() << "\t最小值:" << (numeric_limits<string>::min)() << endl;
+   cout << "type: \t\t" << "************size**************"<< endl;
    return 0;
 }
 

@@ -60,6 +60,7 @@ int errorAndException(void);
 int dynamicMemory(void);
 int thisNamespace(void);
 int thisAssert(void);
+int essentialCheckVariableLength(bool bEnable);
 
 #endif
 /* End of this file. */
