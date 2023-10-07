@@ -1327,11 +1327,30 @@ static int checkClassFundamental(bool bEnable)
    student4.printInfo();
 
    cout << "sizeof(string) = " << sizeof(string) << endl;
-   cout << "sizeof(CStudent) = " << sizeof(cStudent) << endl;
-   cout << "sizeof(CUndergraduateStudent) = " << sizeof(cUndergraduateStudent) << endl;
+   cout << "sizeof(cStudent) = " << sizeof(cStudent) << endl;
+   cout << "sizeof(cUndergraduateStudent) = " << sizeof(cUndergraduateStudent) << endl;
 
    return 0;
 }
+
+static int checkMixFundamental(bool bEnable)
+{
+   int a = 100;
+
+   if (!bEnable) {
+      cout << "The function" << __FUNCTION__<< "is not enable."<< endl ;
+      return 0;
+   }
+
+   {
+      int a = 500;
+      cout << "a(IN block) = " << a << endl;
+   }
+   cout << "a(OUT block)  = " << a << endl;
+
+   return 0;
+}
+
 
 /* Test end */
 
@@ -1346,6 +1365,7 @@ int essentialTestAllInOne(bool bEnable)
 
    /* Test content */
    checkClassFundamental(true);
+   checkMixFundamental(true);
 
 
    return 0;
