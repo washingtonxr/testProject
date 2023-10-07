@@ -1247,6 +1247,94 @@ int essentialTypeConversion(bool bEnable)
    return 0;
 }
 
+/* Test content */
+class cStudent {
+private:
+   string sName;
+   string sID;
+   char cGender;
+   int lAge;
+public:
+   void printInfo(void);
+   int setInfo(const string &name_, const string &id_, int age_, char gender_);
+   string getName(void);
+};
+
+void cStudent::printInfo(void)
+{
+   cout << "Name: " << sName << endl;
+   cout << "ID: " << sID << endl;
+   cout << "Gender: " << cGender << endl;
+   cout << "Age: " << lAge << endl;
+   return;
+}
+
+int cStudent::setInfo(const string &name_, const string &id_, int age_, char gender_)
+{
+   sName = name_;
+   sID = id_;
+   cGender = gender_;
+   lAge = age_;
+   return 0;
+}
+
+string cStudent::getName(void)
+{
+   return sName;
+}
+
+class cUndergraduateStudent:public cStudent {
+private:
+   string sDepartment;
+public:
+   void qualificationCheck(bool bEnable) {
+      cout << "Qualification " << bEnable << endl;
+   }
+   void printInfo(void) {
+      cout << "==============" << endl;
+      cStudent::printInfo();
+      cout << "Department: " << sDepartment << endl;
+   }
+   void setInfo(const string & name_, const string & id_, char gender_,
+               int age_, const string & department_) {
+      cStudent::setInfo(name_, id_, age_, gender_);
+      sDepartment = department_;
+   }
+};
+
+static int checkClassFundamental(bool bEnable)
+{
+   cStudent student1;
+   cUndergraduateStudent student2, student3, student4;
+
+   if (!bEnable) {
+      cout << "The function" << __FUNCTION__<< "is not enable."<< endl ;
+      return 0;
+   }
+
+   student2.setInfo("Harry Potter", "1234567890", 'M', 18, "Hogwarts");
+   student3.setInfo("Hermione Granger", "1234567891", 'F', 18, "Hogwarts");
+   student4.setInfo("Lord Voldemort", "1234567892", 'M', 18, "Hogwarts");
+
+   cout << student2.getName() << " " << endl;
+
+   student2.qualificationCheck(true);
+   student3.qualificationCheck(true);
+   student4.qualificationCheck(false);
+
+   student2.printInfo();
+   student3.printInfo();
+   student4.printInfo();
+
+   cout << "sizeof(string) = " << sizeof(string) << endl;
+   cout << "sizeof(CStudent) = " << sizeof(cStudent) << endl;
+   cout << "sizeof(CUndergraduateStudent) = " << sizeof(cUndergraduateStudent) << endl;
+
+   return 0;
+}
+
+/* Test end */
+
 int essentialTestAllInOne(bool bEnable)
 {
    if (!bEnable) {
@@ -1257,7 +1345,7 @@ int essentialTestAllInOne(bool bEnable)
    cout << "Function " <<__FUNCTION__<< "Line " <<__LINE__<<endl;
 
    /* Test content */
-
+   checkClassFundamental(true);
 
 
    return 0;
