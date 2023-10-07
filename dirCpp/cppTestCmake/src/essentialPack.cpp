@@ -1452,6 +1452,34 @@ static int checkMixFundamental(bool bEnable)
 
 /* Test end */
 
+int checkRandomNumber(bool bEnable)
+{
+    int *p;
+    int r[10];
+
+    if (!bEnable)
+    {
+        cout << "The function" << __FUNCTION__ << "is not enable." << endl;
+        return 0;
+    }
+
+    p = r;
+    srand( (unsigned)time( NULL ) );
+    for (int i = 0; i < 10; ++i)
+    {
+        r[i] = rand();
+        cout << r[i] << endl;
+    }
+
+    for ( int i = 0; i < 10; i++ )
+    {
+        cout << "*(p + " << i << ") : ";
+        cout << *(p + i) << endl;
+    }
+
+    return 0;
+}
+
 int essentialTestAllInOne(bool bEnable)
 {
     if (!bEnable)
@@ -1465,6 +1493,7 @@ int essentialTestAllInOne(bool bEnable)
     /* Test content */
     checkClassFundamental(true);
     checkMixFundamental(true);
+    checkRandomNumber(true);
 
     return 0;
 }
