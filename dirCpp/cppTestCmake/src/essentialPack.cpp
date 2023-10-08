@@ -1339,7 +1339,7 @@ public:
         cout << "Department: " << sDepartment << endl;
     }
     void setInfo(const string &name_, const string &id_, char gender_,
-                 int age_, const string &department_)
+                    int age_, const string &department_)
     {
         cStudent::setInfo(name_, id_, age_, gender_);
         sDepartment = department_;
@@ -1390,6 +1390,7 @@ static int checkMixFundamental(bool bEnable)
     int a = 100;
     // float f = 0;
     auto f = 0.0;
+    char cBuffer[128];
 
     class Example
     {
@@ -1446,6 +1447,14 @@ static int checkMixFundamental(bool bEnable)
 
     cout << "Sum 1 = " << checkSum(100, 200) << endl;
     cout << "Sum 2 = " << checkSum(100) << endl;
+
+    cout << "Please input your name:" << endl;
+    cin >> cBuffer;
+    cout << "You: " << cBuffer << endl;
+    cout << "String length: " << strlen(cBuffer) << endl;
+
+    cerr << "Error message: " << cBuffer << endl;
+    clog << "Error message: " << cBuffer << endl;
 
     return 0;
 }
