@@ -1480,6 +1480,70 @@ int checkRandomNumber(bool bEnable)
     return 0;
 }
 
+#define BST (+1)
+#define CCT (+8)
+
+int checkTime(bool bEnable)
+{
+    time_t tTime, tTimeStart, tTimeEnd;
+    struct tm *pTimeInfo;
+    clock_t tSysClockStart, tSysClockEnd;
+    double dTotalTime;
+    int lRet;
+    char cBuffer[128];
+
+    if (!bEnable)
+    {
+        cout << "The function" << __FUNCTION__ << "is not enable." << endl;
+        return 0;
+    }
+
+    tSysClockStart = clock();
+    time(&tTimeStart);
+
+    tTime = time(NULL);
+    cout << "The hour number from 1970-01-01 = " << tTime/3600 << endl;
+
+    time(&tTime);
+    cout << "Current time = " << ctime(&tTime) << endl;
+
+    pTimeInfo = localtime(&tTime);
+    cout << "Current local time & date = " << asctime(pTimeInfo) << endl;
+
+    strftime(cBuffer, sizeof(cBuffer), "%Y-%m-%d %H:%M:%S", pTimeInfo);
+    printf("格式化的日期 & 时间 : |%s|\n", cBuffer );
+
+    time(&tTime);
+    pTimeInfo = gmtime(&tTime);
+    cout << "Current world time: "<< endl;
+    cout << "London time: " << (pTimeInfo->tm_hour + BST)%24 << ":" << pTimeInfo->tm_min << endl;
+    cout << "China time: " << (pTimeInfo->tm_hour + CCT)%24 << ":" << pTimeInfo->tm_min << endl;
+
+    printf("当前的世界时钟：\n");
+    printf("伦敦：%02d:%02d\n", (pTimeInfo->tm_hour+BST)%24, pTimeInfo->tm_min);
+    printf("中国：%02d:%02d\n", (pTimeInfo->tm_hour+CCT)%24, pTimeInfo->tm_min);
+
+    time(&tTime);
+    pTimeInfo = gmtime(&tTime);
+    lRet = mktime(pTimeInfo);
+    if( lRet == -1 ) {
+        printf("Error: unable to make time using mktime\n");
+    } else {
+        strftime(cBuffer, sizeof(cBuffer), "mktime %c\n", pTimeInfo );
+        printf("%s\n", cBuffer);
+    }
+
+    time(&tTimeEnd);
+    dTotalTime = difftime(tTimeEnd, tTimeStart);
+    printf("执行时间 = %f\n", dTotalTime);
+
+    tSysClockEnd = clock();
+    dTotalTime = (double)(tSysClockEnd - tSysClockStart)/CLOCKS_PER_SEC;
+    cout << "CPU escaped time = " << dTotalTime << endl;
+
+    return 0;
+}
+
 int essentialTestAllInOne(bool bEnable)
 {
     if (!bEnable)
@@ -1494,6 +1558,7 @@ int essentialTestAllInOne(bool bEnable)
     checkClassFundamental(true);
     checkMixFundamental(true);
     checkRandomNumber(true);
+    checkTime(true);
 
     return 0;
 }
