@@ -1297,7 +1297,19 @@ public:
     void printInfo(void);
     int setInfo(const string &name_, const string &id_, int age_, char gender_);
     string getName(void);
+    cStudent(void);
+    ~cStudent(void);
 };
+
+cStudent::cStudent(void)
+{
+    cout << "Welcome-1:" << __FUNCTION__ << endl;
+}
+
+cStudent::~cStudent(void)
+{
+    cout << "Exit-1:" << __FUNCTION__ << endl;
+}
 
 void cStudent::printInfo(void)
 {
@@ -1328,6 +1340,14 @@ private:
     string sDepartment;
 
 public:
+    cUndergraduateStudent(void)
+    {
+        cout << "Welcome-2:" << __FUNCTION__ << endl;
+    }
+    ~cUndergraduateStudent(void)
+    {
+        cout << "Exit-2:" << __FUNCTION__ << endl;
+    }
     void qualificationCheck(bool bEnable)
     {
         cout << "Qualification " << bEnable << endl;
@@ -1345,6 +1365,14 @@ public:
         sDepartment = department_;
     }
 };
+
+#if 0
+cUndergraduateStudent::welcomeInfo(void)
+{
+    cout << "Welcome-2:" << __FUNCTION__ << endl;
+    return;
+}
+#endif
 
 static int checkClassFundamental(bool bEnable)
 {
