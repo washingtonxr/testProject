@@ -1357,9 +1357,10 @@ public:
         cout << "==============" << endl;
         cStudent::printInfo();
         cout << "Department: " << sDepartment << endl;
+        cout << "This Department: " << this->sDepartment << endl;
     }
     void setInfo(const string &name_, const string &id_, char gender_,
-                    int age_, const string &department_)
+                 int age_, const string &department_)
     {
         cStudent::setInfo(name_, id_, age_, gender_);
         sDepartment = department_;
@@ -1374,6 +1375,101 @@ cUndergraduateStudent::welcomeInfo(void)
 }
 #endif
 
+class Shape
+{
+protected:
+    int width, height;
+
+public:
+    Shape(int a = 0, int b = 0)
+    {
+        width = a;
+        height = b;
+    }
+    int area()
+    {
+        cout << "Parent class area :" << endl;
+        return 0;
+    }
+};
+class Rectangle : public Shape
+{
+public:
+    Rectangle(int a = 0, int b = 0) : Shape(a, b) {}
+    int area()
+    {
+        cout << "Rectangle class area :" << endl;
+        return (width * height);
+    }
+};
+class Triangle : public Shape
+{
+public:
+    Triangle(int a = 0, int b = 0) : Shape(a, b) {}
+    int area()
+    {
+        cout << "Triangle class area :" << endl;
+        return (width * height / 2);
+    }
+};
+
+class LineX
+{
+public:
+    int getLength(void);
+    LineX(int len);         // 简单的构造函数
+    LineX(const LineX &obj); // 拷贝构造函数
+    ~LineX();               // 析构函数
+
+private:
+    int *ptr;
+};
+
+// 成员函数定义，包括构造函数
+LineX::LineX(int len)
+{
+    cout << "调用构造函数" << endl;
+    // 为指针分配内存
+    ptr = new int;
+    *ptr = len;
+}
+
+LineX::LineX(const LineX &obj)
+{
+    cout << "调用拷贝构造函数并为指针 ptr 分配内存" << endl;
+    ptr = new int;
+    *ptr = *obj.ptr; // 拷贝值
+}
+
+LineX::~LineX(void)
+{
+    cout << "释放内存" << endl;
+    delete ptr;
+}
+int LineX::getLength(void)
+{
+    return *ptr;
+}
+
+void display(LineX obj)
+{
+    cout << "line 大小 : " << obj.getLength() << endl;
+}
+
+static int checkCopyConstruct(bool bEnable)
+{
+    if (!bEnable)
+    {
+        cout << "The function" << __FUNCTION__ << "is not enable." << endl;
+        return 0;
+    }
+    LineX lineX(10);
+
+    display(lineX);
+
+    return 0;
+}
+
 static int checkClassFundamental(bool bEnable)
 {
     cStudent student1;
@@ -1385,9 +1481,11 @@ static int checkClassFundamental(bool bEnable)
         return 0;
     }
 
+    printf("%p %p %p\n", &student2, &student3, &student4);
+
     student2.setInfo("Harry Potter", "1234567890", 'M', 18, "Hogwarts");
-    student3.setInfo("Hermione Granger", "1234567891", 'F', 18, "Hogwarts");
-    student4.setInfo("Lord Voldemort", "1234567892", 'M', 18, "Hogwarts");
+    student3.setInfo("Hermione Granger", "1234567891", 'F', 18, "Hogwarts1");
+    student4.setInfo("Lord Voldemort", "1234567892", 'M', 18, "Hogwarts2");
 
     cout << student2.getName() << " " << endl;
 
@@ -1403,6 +1501,20 @@ static int checkClassFundamental(bool bEnable)
     cout << "sizeof(cStudent) = " << sizeof(cStudent) << endl;
     cout << "sizeof(cUndergraduateStudent) = " << sizeof(cUndergraduateStudent) << endl;
 
+    Shape *shape;
+    Rectangle rec(10, 7);
+    Triangle tri(10, 5);
+
+    // 存储矩形的地址
+    shape = &rec;
+    // 调用矩形的求面积函数 area
+    shape->area();
+
+    // 存储三角形的地址
+    shape = &tri;
+    // 调用三角形的求面积函数 area
+    shape->area();
+
     return 0;
 }
 
@@ -1411,6 +1523,29 @@ static int checkSum(int a, int b = 20)
     int result;
     result = a + b;
     return (result);
+}
+
+// template <typename AnyType>
+template <class AnyType>
+static void testSwap(AnyType &a, AnyType &b)
+{
+    AnyType temp;
+    temp = a;
+    a = b;
+    b = temp;
+}
+
+template <typename AnyType>
+static void testSwap(AnyType *a, AnyType *b, int n)
+{
+    unsigned char ucLoop = 0;
+    AnyType temp = 0;
+    for (ucLoop = 0; ucLoop < n; ucLoop++)
+    {
+        temp = a[ucLoop];
+        a[ucLoop] = b[ucLoop];
+        b[ucLoop] = temp;
+    }
 }
 
 static int checkMixFundamental(bool bEnable)
@@ -1484,6 +1619,74 @@ static int checkMixFundamental(bool bEnable)
     cerr << "Error message: " << cBuffer << endl;
     clog << "Error message: " << cBuffer << endl;
 
+    auto a1 = 50.25;
+    auto a2 = 11.17;
+    cout << "a1+a2 = " << a1 + a2 << endl;
+
+    cout << "Input a float number for a1 " << endl;
+    cin >> a1;
+    cout << "a1 = " << a1 << endl;
+    cout << "Input a float number for a2 " << endl;
+    cin >> a2;
+    cout << "a2 = " << a2 << endl;
+    cout << "a1+a2 = " << a1 + a2 << endl;
+
+    testSwap(a1, a2);
+    cout << "a1 = " << a1 << endl;
+    cout << "a2 = " << a2 << endl;
+
+#define TEST_CHAR_NUM 5
+    char cTest1[TEST_CHAR_NUM] = {1, 2, 3, 4, 5};
+    char cTest2[TEST_CHAR_NUM] = {'a', 'b', 'c', 'd', 'e'};
+
+    int ucLoop1 = 0;
+    for (ucLoop1 = 0; ucLoop1 < TEST_CHAR_NUM; ucLoop1++)
+    {
+        cout << "cTest1 [" << ucLoop1 << "] = " << cTest1[ucLoop1] << endl;
+    }
+
+    for (ucLoop1 = 0; ucLoop1 < TEST_CHAR_NUM; ucLoop1++)
+    {
+        cout << "cTest2 [" << ucLoop1 << "] = " << cTest2[ucLoop1] << endl;
+    }
+
+    testSwap(cTest1, cTest2, TEST_CHAR_NUM);
+
+    for (ucLoop1 = 0; ucLoop1 < TEST_CHAR_NUM; ucLoop1++)
+    {
+        cout << "cTest1 [" << ucLoop1 << "] = " << cTest1[ucLoop1] << endl;
+    }
+
+    for (ucLoop1 = 0; ucLoop1 < TEST_CHAR_NUM; ucLoop1++)
+    {
+        cout << "cTest2 [" << ucLoop1 << "] = " << cTest2[ucLoop1] << endl;
+    }
+
+    /**************/
+#define N 16
+    memset(cBuffer, 0, sizeof(cBuffer));
+    int *dp1;
+    int *dp2;
+    int i;
+    dp1 = new int[N];           // use heap
+    dp2 = new (cBuffer) int[N]; // use buffer array
+
+    for (i = 0; i < N; i++)
+    {
+        dp2[i] = dp1[i] = 1000 + 20.0 * i;
+    }
+    cout << "Memory addresses:\n"
+         << " heap: " << dp1
+         << " static: " << (void *)cBuffer << endl;
+    cout << "Memory contents:\n";
+    for (i = 0; i < N; i++)
+    {
+        cout << dp1[i] << " at " << &dp1[i] << "; ";
+        cout << dp2[i] << " at " << &dp2[i] << endl;
+    }
+    cout << "\nCalling new and placement new a second time:\n";
+
+    delete (dp1);
     return 0;
 }
 
@@ -1501,14 +1704,14 @@ int checkRandomNumber(bool bEnable)
     }
 
     p = r;
-    srand( (unsigned)time( NULL ) );
+    srand((unsigned)time(NULL));
     for (int i = 0; i < 10; ++i)
     {
         r[i] = rand();
         cout << r[i] << endl;
     }
 
-    for ( int i = 0; i < 10; i++ )
+    for (int i = 0; i < 10; i++)
     {
         cout << "*(p + " << i << ") : ";
         cout << *(p + i) << endl;
@@ -1539,7 +1742,7 @@ int checkTime(bool bEnable)
     time(&tTimeStart);
 
     tTime = time(NULL);
-    cout << "The hour number from 1970-01-01 = " << tTime/3600 << endl;
+    cout << "The hour number from 1970-01-01 = " << tTime / 3600 << endl;
 
     time(&tTime);
     cout << "Current time = " << ctime(&tTime) << endl;
@@ -1548,25 +1751,28 @@ int checkTime(bool bEnable)
     cout << "Current local time & date = " << asctime(pTimeInfo) << endl;
 
     strftime(cBuffer, sizeof(cBuffer), "%Y-%m-%d %H:%M:%S", pTimeInfo);
-    printf("格式化的日期 & 时间 : |%s|\n", cBuffer );
+    printf("格式化的日期 & 时间 : |%s|\n", cBuffer);
 
     time(&tTime);
     pTimeInfo = gmtime(&tTime);
-    cout << "Current world time: "<< endl;
-    cout << "London time: " << (pTimeInfo->tm_hour + BST)%24 << ":" << pTimeInfo->tm_min << endl;
-    cout << "China time: " << (pTimeInfo->tm_hour + CCT)%24 << ":" << pTimeInfo->tm_min << endl;
+    cout << "Current world time: " << endl;
+    cout << "London time: " << (pTimeInfo->tm_hour + BST) % 24 << ":" << pTimeInfo->tm_min << endl;
+    cout << "China time: " << (pTimeInfo->tm_hour + CCT) % 24 << ":" << pTimeInfo->tm_min << endl;
 
     printf("当前的世界时钟：\n");
-    printf("伦敦：%02d:%02d\n", (pTimeInfo->tm_hour+BST)%24, pTimeInfo->tm_min);
-    printf("中国：%02d:%02d\n", (pTimeInfo->tm_hour+CCT)%24, pTimeInfo->tm_min);
+    printf("伦敦：%02d:%02d\n", (pTimeInfo->tm_hour + BST) % 24, pTimeInfo->tm_min);
+    printf("中国：%02d:%02d\n", (pTimeInfo->tm_hour + CCT) % 24, pTimeInfo->tm_min);
 
     time(&tTime);
     pTimeInfo = gmtime(&tTime);
     lRet = mktime(pTimeInfo);
-    if( lRet == -1 ) {
+    if (lRet == -1)
+    {
         printf("Error: unable to make time using mktime\n");
-    } else {
-        strftime(cBuffer, sizeof(cBuffer), "mktime %c\n", pTimeInfo );
+    }
+    else
+    {
+        strftime(cBuffer, sizeof(cBuffer), "mktime %c\n", pTimeInfo);
         printf("%s\n", cBuffer);
     }
 
@@ -1575,7 +1781,7 @@ int checkTime(bool bEnable)
     printf("执行时间 = %f\n", dTotalTime);
 
     tSysClockEnd = clock();
-    dTotalTime = (double)(tSysClockEnd - tSysClockStart)/CLOCKS_PER_SEC;
+    dTotalTime = (double)(tSysClockEnd - tSysClockStart) / CLOCKS_PER_SEC;
     cout << "CPU escaped time = " << dTotalTime << endl;
 
     return 0;
@@ -1596,6 +1802,7 @@ int essentialTestAllInOne(bool bEnable)
     checkMixFundamental(true);
     checkRandomNumber(true);
     checkTime(true);
+    checkCopyConstruct(true);
 
     return 0;
 }
