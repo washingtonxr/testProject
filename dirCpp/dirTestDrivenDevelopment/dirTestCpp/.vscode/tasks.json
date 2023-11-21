@@ -1,0 +1,9 @@
+{
+    "tasks": [
+        {
+            "label": "cppbuild",
+            "command": "make"
+        }
+    ],
+    "version": "2.0.0"
+}
