@@ -9,11 +9,30 @@ int main(int argc, char **argv)
 
 #if 1
     /* Essential operator. */
-    essentialCheckVariableLength(true);
-    essentialTypeConversion(true);
+    essentialCheckVariableLength(false);
+    essentialTypeConversion(false);
 
-    essentialTestAllInOne(true);
+    essentialTestAllInOne(false);
 
+    AssertFatal(true, "Something went worng. This shouldn't happen\n");
+
+    assert(2 + 2 == 4);
+    std::cout << "Checkpoint #1\n";
+
+    assert((void("void helps to avoid 'unused value' warning"), 2 * 2 == 4));
+    std::cout << "Checkpoint #2\n";
+
+    assert((2 * 2 == 4) && ("void helps to avoid 'unused value' warning"));
+    std::cout << "Checkpoint #2-1\n";
+
+    assert((010 + 010 == 16) && "Yet another way to add an assert message");
+    std::cout << "Checkpoint #3\n";
+
+    assertm((2 + 2) % 3 == 1, "Success");
+    std::cout << "Checkpoint #4\n";
+
+    assertm(2 + 2 == 5, "Failed");                             // assertion fails
+    std::cout << "Execution continues past the last assert\n"; // No output
 #else
     /* Algorithm function exmaple. */
     lookUpPrimeNumbers();

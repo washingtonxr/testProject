@@ -1375,37 +1375,46 @@ cUndergraduateStudent::welcomeInfo(void)
 }
 #endif
 
-class Shape
+class ShapeD2
 {
 protected:
     int width, height;
 
 public:
-    Shape(int a = 0, int b = 0)
+    ShapeD2(int a = 0, int b = 0)
     {
         width = a;
         height = b;
     }
     int area()
     {
-        cout << "Parent class area :" << endl;
+        cout << "Parent class area :" << width * height << endl;
         return 0;
     }
+    ShapeD2 operator+(const ShapeD2 &Obj) const;
 };
-class Rectangle : public Shape
+
+ShapeD2 ShapeD2::operator+(const ShapeD2 &Obj) const
+{
+    ShapeD2 newShape;
+    newShape.height = this->height + Obj.height;
+    newShape.width = this->width + Obj.width;
+    return newShape;
+}
+class Rectangle : public ShapeD2
 {
 public:
-    Rectangle(int a = 0, int b = 0) : Shape(a, b) {}
+    Rectangle(int a = 0, int b = 0) : ShapeD2(a, b) {}
     int area()
     {
         cout << "Rectangle class area :" << endl;
         return (width * height);
     }
 };
-class Triangle : public Shape
+class Triangle : public ShapeD2
 {
 public:
-    Triangle(int a = 0, int b = 0) : Shape(a, b) {}
+    Triangle(int a = 0, int b = 0) : ShapeD2(a, b) {}
     int area()
     {
         cout << "Triangle class area :" << endl;
@@ -1417,9 +1426,9 @@ class LineX
 {
 public:
     int getLength(void);
-    LineX(int len);         // 简单的构造函数
+    LineX(int len);          // 简单的构造函数
     LineX(const LineX &obj); // 拷贝构造函数
-    ~LineX();               // 析构函数
+    ~LineX();                // 析构函数
 
 private:
     int *ptr;
@@ -1469,6 +1478,35 @@ static int checkCopyConstruct(bool bEnable)
 
     return 0;
 }
+class Distance
+{
+private:
+    int feet;   // 0 到无穷
+    int inches; // 0 到 12
+public:
+    // 所需的构造函数
+    Distance()
+    {
+        feet = 0;
+        inches = 0;
+    }
+    Distance(int f, int i)
+    {
+        feet = f;
+        inches = i;
+    }
+    friend ostream &operator<<(ostream &output, const Distance &D)
+    {
+        output << "F : " << D.feet << " I : " << D.inches;
+        return output;
+    }
+
+    friend istream &operator>>(istream &input, Distance &D)
+    {
+        input >> D.feet >> D.inches;
+        return input;
+    }
+};
 
 static int checkClassFundamental(bool bEnable)
 {
@@ -1501,9 +1539,12 @@ static int checkClassFundamental(bool bEnable)
     cout << "sizeof(cStudent) = " << sizeof(cStudent) << endl;
     cout << "sizeof(cUndergraduateStudent) = " << sizeof(cUndergraduateStudent) << endl;
 
-    Shape *shape;
+    ShapeD2 *shape;
     Rectangle rec(10, 7);
     Triangle tri(10, 5);
+    ShapeD2 testShape1(10, 10);
+    ShapeD2 testShape2(20, 20);
+    ShapeD2 totalShape;
 
     // 存储矩形的地址
     shape = &rec;
@@ -1514,6 +1555,17 @@ static int checkClassFundamental(bool bEnable)
     shape = &tri;
     // 调用三角形的求面积函数 area
     shape->area();
+
+    totalShape = testShape1 + testShape2;
+    totalShape.area();
+
+    //------------------------------
+    Distance D1(11, 10), D2(5, 11), D3;
+    cout << "Enter the value of object : " << endl;
+    cin >> D3;
+    cout << "First Distance : " << D1 << endl;
+    cout << "Second Distance :" << D2 << endl;
+    cout << "Third Distance :" << D3 << endl;
 
     return 0;
 }
