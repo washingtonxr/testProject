@@ -1,3 +1,20 @@
+import re
+text = 'The price is $1099. The price of the product is $199.'
+pattern = r'[^a-zA-Z0-9\u4e00-\u9fa5\s]+'
+result = re.findall(pattern, text)
+if result:
+    print('Matches found:', result)
+else:
+    print('Matches not found')
+
+string = '1102231990xxxxxxxx'
+res = re.search('(?P<province>\d{3})(?P<city>\d{3})(?P<born_year>\d{4})(?P<born_month>\w{2})(?P<born_date>\w{2})', string)
+if res:
+    result = res.groupdict()
+    print(result)
+else:
+    print("No search results found")
+
 # import unittest
 # class testing(unittest.TestCase):
 #     def test_upper(self):
