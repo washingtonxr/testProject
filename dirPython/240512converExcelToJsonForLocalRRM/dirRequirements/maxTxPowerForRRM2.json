@@ -1,0 +1,474 @@
+{
+	"US":{
+		"band24":{
+			"20Mhz":[
+			{
+				"channel": 1,
+				"maxPower": 20
+			},
+			{
+				"channel": 6,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 1,
+				"maxPower": 20
+			},
+			{
+				"channel": 6,
+				"maxPower": 23
+			}
+			]
+		},
+		"band5":{
+			"20Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"80Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"160Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			]
+		},
+		"band6":{
+			"20Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"80Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"160Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"320Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			]
+		}
+	},
+	"EU":{
+		"band24":{
+			"20Mhz":[
+			{
+				"channel": 1,
+				"maxPower": 20
+			},
+			{
+				"channel": 6,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 1,
+				"maxPower": 20
+			},
+			{
+				"channel": 6,
+				"maxPower": 23
+			}
+			]
+		},
+		"band5":{
+			"20Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"80Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"160Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			]
+		},
+		"band6":{
+			"20Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"80Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"160Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"320Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			]
+		}
+	},
+	"ID":{
+		"band24":{
+			"20Mhz":[
+			{
+				"channel": 1,
+				"maxPower": 20
+			},
+			{
+				"channel": 6,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 1,
+				"maxPower": 20
+			},
+			{
+				"channel": 6,
+				"maxPower": 23
+			}
+			]
+		},
+		"band5":{
+			"20Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"80Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"160Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			]
+		},
+		"band6":{
+			"20Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"80Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"160Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"320Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			]
+		}
+	},
+	"CN":{
+		"band24":{
+			"20Mhz":[
+			{
+				"channel": 1,
+				"maxPower": 20
+			},
+			{
+				"channel": 6,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 1,
+				"maxPower": 20
+			},
+			{
+				"channel": 6,
+				"maxPower": 23
+			}
+			]
+		},
+		"band5":{
+			"20Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"80Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			],
+			"160Mhz":[
+			{
+				"channel": 100,
+				"maxPower": 20
+			},
+			{
+				"channel": 104,
+				"maxPower": 23
+			}
+			]
+		},
+		"band6":{
+			"20Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"40Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"80Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"160Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			],
+			"320Mhz":[
+			{
+				"channel": 37,
+				"maxPower": 20
+			},
+			{
+				"channel": 53,
+				"maxPower": 23
+			}
+			]
+		}
+	}
+}

@@ -1,19 +1,64 @@
-import re
-text = 'The price is $1099. The price of the product is $199.'
-pattern = r'[^a-zA-Z0-9\u4e00-\u9fa5\s]+'
-result = re.findall(pattern, text)
-if result:
-    print('Matches found:', result)
-else:
-    print('Matches not found')
+import pandas as pd
+import numpy as np
+import os
 
-string = '1102231990xxxxxxxx'
-res = re.search('(?P<province>\d{3})(?P<city>\d{3})(?P<born_year>\d{4})(?P<born_month>\w{2})(?P<born_date>\w{2})', string)
-if res:
-    result = res.groupdict()
-    print(result)
-else:
-    print("No search results found")
+df = pd.DataFrame(np.random.randint(50,100, size=(4,4)),
+                  columns=pd.MultiIndex.from_product([["math", "physics"], ["term1", "term2"]]),
+                  index=pd.MultiIndex.from_tuples([("class1", "LiLei"), ("Class1", "HanMei"),
+                                                   ("class2", "LiLei2"), ("Class2", "HanMei2")]))
+df.index.names=["class", "name"]
+print(df)
+
+path_current = os.getcwd()
+DIR_DATA_OUTPUT = "dirDataOutput"
+# Print the JSON data
+path_root = os.path.join(path_current, DIR_DATA_OUTPUT)
+path_file_output = os.path.join(path_root, "test.json")
+print(">>>Create JSON file {}".format(path_file_output))
+if not os.path.exists(path_root):
+    os.makedirs(path_root)
+with open(path_file_output, '+w') as output_file:
+    output_file.write(df.to_json())
+
+
+# df0 = pd.DataFrame(
+#     [[101, 102, 140], [114, 95, 67], [87, 128, 117]],
+#     index=['语文', '数学', '英语'],
+#     columns=['小明', '小红',"小孙"])
+#
+# df0
+
+# # 保存原始的print函数，以便稍后调用它。
+# rewrite_print = print
+# # 定义新的print函数。
+# def print(*arg):
+#     # 首先，调用原始的print函数将内容打印到控制台。
+#     rewrite_print(*arg)
+#     # 如果日志文件所在的目录不存在，则创建一个目录。
+#     output_dir = "log_file"
+#     if not os.path.exists(output_dir):
+#         os.makedirs(output_dir)
+#     # 打开（或创建）日志文件并将内容写入其中。
+#     log_name = 'log.txt'
+#     filename = os.path.join(output_dir, log_name)
+#     rewrite_print(*arg, file=open(filename, "a"))
+
+# import re
+# text = 'The price is $1099. The price of the product is $199.'
+# pattern = r'[^a-zA-Z0-9\u4e00-\u9fa5\s]+'
+# result = re.findall(pattern, text)
+# if result:
+#     print('Matches found:', result)
+# else:
+#     print('Matches not found')
+#
+# string = '1102231990xxxxxxxx'
+# res = re.search('(?P<province>\d{3})(?P<city>\d{3})(?P<born_year>\d{4})(?P<born_month>\w{2})(?P<born_date>\w{2})', string)
+# if res:
+#     result = res.groupdict()
+#     print(result)
+# else:
+#     print("No search results found")
 
 # import unittest
 # class testing(unittest.TestCase):
