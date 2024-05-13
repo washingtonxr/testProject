@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-df = pd.read_json('maxTxPowerForRRM2.json')
+df = pd.read_json('../dirRequirements/maxTxPowerForRRM2.json')
 # with open('./', 'r') as f:
 #     data = json.loads(f.read())
 

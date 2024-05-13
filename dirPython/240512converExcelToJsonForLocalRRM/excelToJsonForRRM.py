@@ -20,6 +20,7 @@ FILE_OUTPUT_PREFIX = "maxTxPowerForRRM"
 SHEET_NAME = "Input_Format"
 DIR_RAW_DATA = "dirDataRaw"
 DIR_DATA_OUTPUT = "dirDataOutput"
+FILE_OUTPUT_TYPE = ".json"
 
 
 # def debug_info(*contents):
@@ -27,10 +28,10 @@ DIR_DATA_OUTPUT = "dirDataOutput"
 #     print("{}:{}:{} {}".format(time.time(), frame.f_code.co_name, frame.f_lineno, contents))
 
 
-def create_json_file(file_postfix, path_current, log_enabled):
+def create_json_file(file_postfix, path_current, data, log_enabled):
     # Print the JSON data
     name_file_output = FILE_OUTPUT_PREFIX + "[" + file_postfix + "]" + ".json"
-    path_file_output = os.path.join(path_current, DIR_DATA_OUTPUT, name_file_output)
+    path_file_output = os.path.join(os.getcwd(), DIR_DATA_OUTPUT, name_file_output)
     if log_enabled:
         print(">>>Create JSON file {}.json".format(path_file_output))
 
@@ -118,6 +119,34 @@ def single_record_processing(df, index, log_enabled):
     return channel_max_power_list
 
 
+def file_processing(dict_data, log_enabled):
+    if log_enabled:
+        print("### ~~~~~~ Enter: " + inspect.stack()[0][3] + " ~~~~~~~ ###")
+
+    for key in dict_data.keys():
+        # df = pd.DataFrame(dict_data[key])
+        print("key {}".format(key))
+        file_postfix = re.sub(r'[\s\/]', '_', key)
+
+        # Convert and write JSON object to file
+        name_file_output = FILE_OUTPUT_PREFIX + "[" + file_postfix + "]" + FILE_OUTPUT_TYPE
+        path_output = os.path.join(os.getcwd(), DIR_DATA_OUTPUT)
+        path_file_output = os.path.join(os.getcwd(), DIR_DATA_OUTPUT, name_file_output)
+        if log_enabled:
+            print("Create JSON file {}.json".format(path_file_output))
+
+        if not os.path.exists(path_output):
+            os.makedirs(path_output)
+
+        with open(path_file_output, 'w') as output_file:
+            # output_file.write(df.to_json())
+            output_file.write(json.dumps(dict_data[key], indent=4))
+
+    if log_enabled:
+        print("### ~~~~~~ Exit: " + inspect.stack()[0][3] + " ~~~~~~~ ###")
+    return True
+
+
 def data_processing(df, log_enabled):
     if log_enabled:
         print("### ~~~~~~ Enter: " + inspect.stack()[0][3] + " ~~~~~~~ ###")
@@ -133,6 +162,7 @@ def data_processing(df, log_enabled):
     channel = 0
     max_power = 0
     processed_num = 0
+    significant_row_offset = 2
     ChannelAndMaxTxPower_List = []
     global Model_Dict
     global Region_Dict
@@ -140,8 +170,10 @@ def data_processing(df, log_enabled):
     global Bandwidth_Dict
 
     # Iterate through each record, start from the second line(Row #4) of the table
-    for y in range(2, record_total_rows):
+    for y in range(significant_row_offset, record_total_rows):
+        control_bit_map = 0
         processed_num = processed_num + 1
+        ChannelAndMaxTxPower_List.clear()
 
         if log_enabled:
             print("=>Record({}-{}):{}".format(processed_num, y, df.values[y]))
@@ -153,62 +185,57 @@ def data_processing(df, log_enabled):
         record_radio_band = df['Radio'][y]
         record_bandwidth = df['Bandwidth'][y]
 
-        if model_name != record_model_name:
-            model_name = record_model_name
-            print("New 'Model({})' found".format(model_name))
-            Model_Dict.clear()
-            # Create a new JSON file
-            # TBD
-
-        if country_code != record_country_code:
-            country_code = record_country_code
-            print("New 'Country code({})' found".format(country_code))
-            Region_Dict.clear()
-            if not log_enabled:
-                print("Bandwidth_Dict:{}" .format(Bandwidth_Dict))
-
-        if radio_band != record_radio_band:
-            radio_band = record_radio_band
-            print("New 'Radio band({})' found".format(radio_band))
-            Band_Dict.clear()
-            Bandwidth_Dict.clear()
-
-        if bandwidth != record_bandwidth:
-            bandwidth = record_bandwidth
-            if log_enabled:
-                print("New 'Bandwidth({})' found".format(bandwidth))
-            ChannelAndMaxTxPower_List.clear()
-            # Bandwidth_Dict.clear()
-
         # Construct 'Channel and Max Tx power list'
         ChannelAndMaxTxPower_List = single_record_processing(df, y, False)
 
-        # Construct 'Bandwidth and Channel and Max Tx power dictionary
-        Bandwidth_Dict[record_bandwidth] = ChannelAndMaxTxPower_List.copy()
+        if model_name != record_model_name:
+            if log_enabled:
+                print("New 'Model({})' found".format(model_name))
+            if len(Bandwidth_Dict) > 0:
+                Band_Dict[radio_band] = Bandwidth_Dict.copy()
+                Bandwidth_Dict.clear()
+            if len(Band_Dict) > 0:
+                Region_Dict[country_code] = Band_Dict.copy()
+                Band_Dict.clear()
+            if len(Region_Dict) > 0:
+                Model_Dict[model_name] = Region_Dict.copy()
+                Region_Dict.clear()
+            model_name = record_model_name
 
-        # if not log_enabled:
-        #     print("Bandwidth_Dict:{}" .format(Bandwidth_Dict))
+        if country_code != record_country_code:
+            if log_enabled:
+                print("New 'Country code({})' found".format(country_code))
+            if len(Bandwidth_Dict) > 0:
+                Band_Dict[radio_band] = Bandwidth_Dict.copy()
+                Bandwidth_Dict.clear()
+            if len(Band_Dict) > 0:
+                Region_Dict[country_code] = Band_Dict.copy()
+                Band_Dict.clear()
+            country_code = record_country_code
 
-                # Construct 'Band and Bandwidth_Dict dictionary'
-                # Band_Dict = {record_radio_band: Bandwidth_Dict}
-                # print(Band_Dict)
+        if radio_band != record_radio_band:
+            if log_enabled:
+                print("New 'Radio band({})' found".format(radio_band))
+            if len(Bandwidth_Dict) > 0:
+                if log_enabled:
+                    print("Bandwidth_Dict:{}".format(Bandwidth_Dict))
+                Band_Dict[radio_band] = Bandwidth_Dict.copy()
+                Bandwidth_Dict.clear()
+            radio_band = record_radio_band
 
+        if bandwidth != record_bandwidth:
+            if log_enabled:
+                print("New 'Bandwidth({})' found".format(bandwidth))
+            Bandwidth_Dict[record_bandwidth] = ChannelAndMaxTxPower_List.copy()
+            bandwidth = record_bandwidth
 
-        # for x in range(7, record_total_columns):
-        #     print(">>>Channel {}".format(df.iat[y, x]))
-        #
-        # print(">>>Module {} Region {} Radio {} Bandwidth {}".format(model_name,
-        #                                                             country_code,
-        #                                                             radio_band,
-        #                                                             bandwidth))
-
-        # Normalised file names
-        # module_name_original = dfv2['Model'][index]
-        # module_name = re.sub(r'[\s\/]', '_', module_name_original)
-        # print(">>>Index[{}] '{}' vs '{}'".format(index, module_name_original, module_name))
-
-        # Create json file with the model name
-        # create_json_file(module_name, path_current)
+        # Identify the last record
+        if processed_num == record_total_rows - significant_row_offset:
+            if not log_enabled:
+                print("This is the LAST RECORD")
+            if not file_processing(Model_Dict, False):
+                print("Write file failed")
+            Model_Dict.clear()
     print("### ~~~~~~ Exit: " + inspect.stack()[0][3] + " ~~~~~~~ ###")
     return
 

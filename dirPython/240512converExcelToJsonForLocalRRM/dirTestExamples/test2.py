@@ -20,7 +20,44 @@ if not os.path.exists(path_root):
 with open(path_file_output, '+w') as output_file:
     output_file.write(df.to_json())
 
+# if len(Band_Dict) > 0:
+#     Region_Dict[country_code] = Band_Dict.copy()
+#     Band_Dict.clear()
+#     if log_enabled:
+#         print("M {}\t CC {}\t R {}\t BW {}\n-> Band_Dict:{}".format(record_model_name,
+#                                                                     record_country_code,
+#                                                                     record_radio_band,
+#                                                                     record_bandwidth,
+#                                                                     Band_Dict))
+        # if log_enabled:
+        #     print("Handling data, M {}\t CC {}\t R {}\t BW {}\n-> Band_Dict:{}".format(record_model_name,
+        #                                                                 record_country_code,
+        #                                                                 record_radio_band,
+        #                                                                 record_bandwidth,
+        #                                                                 Band_Dict))
 
+    # if not log_enabled:
+        #     print("Bandwidth_Dict:{}" .format(Bandwidth_Dict))
+
+        # Construct 'Band and Bandwidth_Dict dictionary'
+        # Band_Dict = {record_radio_band: Bandwidth_Dict}
+        # print(Band_Dict)
+
+        # for x in range(7, record_total_columns):
+        #     print(">>>Channel {}".format(df.iat[y, x]))
+        #
+        # print(">>>Module {} Region {} Radio {} Bandwidth {}".format(model_name,
+        #                                                             country_code,
+        #                                                             radio_band,
+        #                                                             bandwidth))
+
+        # Normalised file names
+        # module_name_original = dfv2['Model'][index]
+        # module_name = re.sub(r'[\s\/]', '_', module_name_original)
+        # print(">>>Index[{}] '{}' vs '{}'".format(index, module_name_original, module_name))
+
+        # Create json file with the model name
+        # create_json_file(module_name, path_current)
 # df0 = pd.DataFrame(
 #     [[101, 102, 140], [114, 95, 67], [87, 128, 117]],
 #     index=['语文', '数学', '英语'],
