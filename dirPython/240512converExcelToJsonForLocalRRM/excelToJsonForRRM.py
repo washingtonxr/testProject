@@ -233,6 +233,17 @@ def data_processing(df, log_enabled):
         if processed_num == record_total_rows - significant_row_offset:
             if not log_enabled:
                 print("This is the LAST RECORD")
+
+            if len(Bandwidth_Dict) > 0:
+                Band_Dict[radio_band] = Bandwidth_Dict.copy()
+                Bandwidth_Dict.clear()
+            if len(Band_Dict) > 0:
+                Region_Dict[country_code] = Band_Dict.copy()
+                Band_Dict.clear()
+            if len(Region_Dict) > 0:
+                Model_Dict[model_name] = Region_Dict.copy()
+                Region_Dict.clear()
+
             if not file_processing(Model_Dict, False):
                 print("Write file failed")
             Model_Dict.clear()
