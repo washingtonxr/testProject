@@ -140,11 +140,36 @@ def file_processing(dict_data, log_enabled):
 
         with open(path_file_output, 'w') as output_file:
             # output_file.write(df.to_json())
-            output_file.write(json.dumps(dict_data[key], indent=4))
+            output_file.write(json.dumps(dict_data[key]))
 
     if log_enabled:
         print("### ~~~~~~ Exit: " + inspect.stack()[0][3] + " ~~~~~~~ ###")
     return True
+
+
+def normalize_country_code(original_country_code):
+    if original_country_code == "NA Region":
+        return "US"
+    elif original_country_code == "EU Region":
+        return "EU"
+    elif original_country_code == "Canada":
+        return "CA"
+    elif original_country_code == "Indonesia":
+        return "ID"
+    elif original_country_code == "Singapore":
+        return "SG"
+    elif original_country_code == "India":
+        return "IN"
+    elif original_country_code == "Mexico":
+        return "MX"
+    elif original_country_code == "Saudi Arabia":
+        return "SA"
+    elif original_country_code == "Nepal":
+        return "NP"
+    elif original_country_code == "Ukraine":
+        return "UK"
+    else:
+        return original_country_code
 
 
 def data_processing(df, log_enabled):
@@ -181,7 +206,7 @@ def data_processing(df, log_enabled):
         # data = dfv2.iloc[index].values
         # print(">>>Index[{}] '{}'".format(index, data))
         record_model_name = df['Model'][y]
-        record_country_code = df['Region'][y]
+        record_country_code = normalize_country_code(df['Region'][y])
         record_radio_band = df['Radio'][y]
         record_bandwidth = df['Bandwidth'][y]
 
