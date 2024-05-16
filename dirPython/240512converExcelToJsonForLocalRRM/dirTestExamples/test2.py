@@ -1,24 +1,125 @@
-import pandas as pd
-import numpy as np
-import os
+# 批量采集百度图库图片数据
+import re
+import requests
+import threading
+import urllib.request,urllib.response
+import uuid
+import time
+ 
+from day17.demo04_python_logging import *
+ 
+# 定义下载器线程
+class Downloader(threading.Thread):
+    def __init__(self, url, fileName):
+        threading.Thread.__init__(self)
+        self.__url = url
+        self.__fileName = fileName
+        pass
+ 
+    # 重写run方法
+    def run(self):
+        # 获得资源文件名称和资源信息（封装在响应头）
+        try:
+            fileName, headers = urllib.request.urlretrieve(self.__url)
+            print("正在下载:")
+            urllib.request.urlretrieve(self.__url, self.__fileName, self.download)
+            print("下载完成！")
+        except Exception as e:
+            logger.error("下载文件失败:" + url )
+            pass
+ 
+        pass
+ 
+    @staticmethod
+    def download(bockNum, blockSize, contentLength):
+        p = 100*bockNum*blockSize/contentLength
+        if p > 100:
+            p = 100
+        print("下载进度{0}%".format(p))
+        pass
+    pass
+ 
+ 
+def decode_url(url):
+ 
+    """
+    对百度加密后的地址进行解码\n
+    :param url:百度加密的url\n
+    :return:解码后的url
+    """
+    table = {'w': "a", 'k': "b", 'v': "c", '1': "d", 'j': "e", 'u': "f", '2': "g", 'i': "h",
+             't': "i", '3': "j", 'h': "k", 's': "l", '4': "m", 'g': "n", '5': "o", 'r': "p",
+             'q': "q", '6': "r", 'f': "s", 'p': "t", '7': "u", 'e': "v", 'o': "w", '8': "1",
+             'd': "2", 'n': "3", '9': "4", 'c': "5", 'm': "6", '0': "7",
+             'b': "8", 'l': "9", 'a': "0", '_z2C$q': ":", "_z&e3B": ".", 'AzdH3F': "/"}
+ 
+    url = re.sub(r'(?P<value>_z2C\$q|_z\&e3B|AzdH3F+)', lambda matched: table.get(matched.group('value')), url)
+    return re.sub(r'(?P<value>[0-9a-w])', lambda matched: table.get(matched.group('value')), url)
+ 
+ 
+#
+if __name__ == "__main__":
+ 
+    pn = 0
+ 
+    # 初始化url地址
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'
+    }
+ 
+    # 通过对比两个网址可以发现只有pn和gsm的值发生了改变。pn代表的是页数，rn代表每页显示的图片数量。gsm是pn 的 16位显示。
+    while True:
+ 
+        url = "https://image.baidu.com/search/acjson?tn=resultjson_com&ipn=rj&" \
+              "ct=201326592&is=&fp=result&queryWord=汽车&cl=2&lm=&ie=utf-8&oe=utf-8&adpicid=&st=-1&z=&ic=&hd=" \
+              "&latest=&copyright=&word=汽车&s=&se=&tab=&width=&height=&face=0" \
+              "&istype=2&qc=&nc=1&fr=&expermode=&pn={0}&rn=30&gsm={1}&1545483113251=".format(pn, (str(hex(pn)))[2:])
+ 
+        print(url)
+        try:
+            response = requests.get(url, headers= headers)
+ 
+            obj = response.json()
+ 
+            for temp in obj['data']:
+                if temp.get('objURL'):
+                    imgURL = temp['objURL']
+                    if imgURL.startswith('ippr_z2C'):  # endswith
+                        imgURL = decode_url(imgURL)
+                        pass
+                    downloader = Downloader(imgURL, str(uuid.uuid4()) + '.jpg')
+                    downloader.start()
+                    pass
+                pass
+            time.sleep(10)
+            pn += 30
+        except Exception as e:
+            logger.error("URL地址访问数据异常：" + url)
+            pass
+ 
+    pass
 
-df = pd.DataFrame(np.random.randint(50,100, size=(4,4)),
-                  columns=pd.MultiIndex.from_product([["math", "physics"], ["term1", "term2"]]),
-                  index=pd.MultiIndex.from_tuples([("class1", "LiLei"), ("Class1", "HanMei"),
-                                                   ("class2", "LiLei2"), ("Class2", "HanMei2")]))
-df.index.names=["class", "name"]
-print(df)
+# import pandas as pd
+# import numpy as np
+# import os
 
-path_current = os.getcwd()
-DIR_DATA_OUTPUT = "dirDataOutput"
-# Print the JSON data
-path_root = os.path.join(path_current, DIR_DATA_OUTPUT)
-path_file_output = os.path.join(path_root, "test.json")
-print(">>>Create JSON file {}".format(path_file_output))
-if not os.path.exists(path_root):
-    os.makedirs(path_root)
-with open(path_file_output, '+w') as output_file:
-    output_file.write(df.to_json())
+# df = pd.DataFrame(np.random.randint(50,100, size=(4,4)),
+#                   columns=pd.MultiIndex.from_product([["math", "physics"], ["term1", "term2"]]),
+#                   index=pd.MultiIndex.from_tuples([("class1", "LiLei"), ("Class1", "HanMei"),
+#                                                    ("class2", "LiLei2"), ("Class2", "HanMei2")]))
+# df.index.names=["class", "name"]
+# print(df)
+
+# path_current = os.getcwd()
+# DIR_DATA_OUTPUT = "dirDataOutput"
+# # Print the JSON data
+# path_root = os.path.join(path_current, DIR_DATA_OUTPUT)
+# path_file_output = os.path.join(path_root, "test.json")
+# print(">>>Create JSON file {}".format(path_file_output))
+# if not os.path.exists(path_root):
+#     os.makedirs(path_root)
+# with open(path_file_output, '+w') as output_file:
+#     output_file.write(df.to_json())
 
 # if len(Band_Dict) > 0:
 #     Region_Dict[country_code] = Band_Dict.copy()
