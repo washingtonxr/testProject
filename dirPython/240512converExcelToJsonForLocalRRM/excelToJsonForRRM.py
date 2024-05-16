@@ -166,6 +166,8 @@ def normalize_country_code(original_country_code):
         return "SA"
     elif original_country_code == "Nepal":
         return "NP"
+    elif original_country_code == "OC Region":
+        return "AU"
     elif original_country_code == "Ukraine":
         return "UK"
     else:
