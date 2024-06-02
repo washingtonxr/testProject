@@ -27,8 +27,7 @@ def serviceSerial():
             ret = mySerialInstance.readline()
             # print(ret)
             if len(ret):
-                data_get = ret.decode('utf-8', 'ignore')
-                #data_get = ret.decode('UTF-8')
+                data_get = ret.decode('UTF-8')
                 # print(data_get)
                 with open(fileName, 'a') as f:
                     f.write(currentTimeInfo + ":" + data_get)
@@ -65,11 +64,9 @@ def getSerialInfo():
         serial.close()
 
     #Serial data receive thread
-    #myThread1 = threading.Thread(target=serviceSerial)
-    #myThread1.setDaemon=True
-    #myThread1.start()
-
-    serviceSerial()
+    myThread1 = threading.Thread(target=serviceSerial)
+    myThread1.setDaemon=True
+    myThread1.start()
     print("### ~~~~~~ Exit: " + inspect.stack()[0][3] + " ~~~~~~~ ###")
 
 if __name__ == '__main__':
