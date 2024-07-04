@@ -310,7 +310,7 @@ def main(log_enabled):
 
     df = load_file(FILE_SOURCE, SHEET_NAME, False)
     df_format = format_preprocessing(df, False)
-    data_processing(df_format, True)
+    data_processing(df_format, False)
     if log_enabled:
         print("### ~~~~~~ Exit: " + inspect.stack()[0][3] + " ~~~~~~~ ###")
 
