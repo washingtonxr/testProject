@@ -9,18 +9,21 @@ import re
 import string
 import math
 import time
+import shutil
 
 Model_Dict = {}
 Region_Dict = {}
 Band_Dict = {}
 Bandwidth_Dict = {}
 
-FILE_SOURCE = "Input_new_format.xlsx"
+FILE_SOURCE = "240704Input_new_format-Mahendar.xlsx"
 FILE_OUTPUT_PREFIX = "maxTxPowerForRRM"
 SHEET_NAME = "Input_Format"
 DIR_RAW_DATA = "dirDataRaw"
 DIR_DATA_OUTPUT = "dirDataOutput"
 FILE_OUTPUT_TYPE = ".json"
+
+PARSE_COLUMN_OFFSET = 7
 
 
 # def debug_info(*contents):
@@ -54,8 +57,9 @@ def format_preprocessing(df_input, log_enabled):
                                   'Unnamed: 1': 'Sl.No',
                                   'Unnamed: 2': 'Model',
                                   'Unnamed: 3': 'Region',
-                                  'Unnamed: 4': 'Radio',
-                                  'Unnamed: 5': 'Bandwidth'})
+                                  'Unnamed: 4': 'CountryCode',
+                                  'Unnamed: 5': 'Radio',
+                                  'Unnamed: 6': 'Bandwidth'})
     record_total_rows, record_total_columns = len(df), len(df.columns)
 
     # for x in range(7, record_total_columns):
@@ -88,22 +92,24 @@ def single_record_processing(df, index, log_enabled):
     frame = inspect.currentframe()
     record_total_rows, record_total_columns = len(df), len(df.columns)
     record_model_name = df['Model'][index]
-    record_country_code = df['Region'][index]
+    record_region = df['Region'][index]
+    record_country_code = df['CountryCode'][index]
     record_radio_band = df['Radio'][index]
     record_bandwidth = df['Bandwidth'][index]
     channel_max_power_list = []
 
     # Generate a dictionary in this format: [{"channel":1,"maxPower":20},{"channel":6,"maxPower":23}],
-    for channel_index in range(7, record_total_columns):
+    for channel_index in range(PARSE_COLUMN_OFFSET, record_total_columns):
         max_tx_power = df.iat[index, channel_index]
         if not math.isnan(max_tx_power):
             channel_number = df.iat[0, channel_index]
             if log_enabled:
-                print("{}:{}:{}: Model '{}' CountryCode '{}' Band {} Bandwidth {} Channel {} MaxTxPower {}"
+                print("{}:{}:{}: Model '{}' Region '{}' CountryCode '{}' Band {} Bandwidth {} Channel {} MaxTxPower {}"
                       .format(time.time(),
                               frame.f_code.co_name,
                               frame.f_lineno,
                               record_model_name,
+                              record_region,
                               record_country_code,
                               record_radio_band,
                               record_bandwidth,
@@ -122,6 +128,11 @@ def single_record_processing(df, index, log_enabled):
 def file_processing(dict_data, log_enabled):
     if log_enabled:
         print("### ~~~~~~ Enter: " + inspect.stack()[0][3] + " ~~~~~~~ ###")
+
+    # Check if the repository folder already exists
+    if os.path.exists(DIR_DATA_OUTPUT) and os.path.isdir(DIR_DATA_OUTPUT):
+        print(f"Folder '{DIR_DATA_OUTPUT}' already exists. Deleting it...")
+        shutil.rmtree(DIR_DATA_OUTPUT)
 
     for key in dict_data.keys():
         # df = pd.DataFrame(dict_data[key])
@@ -183,6 +194,7 @@ def data_processing(df, log_enabled):
 
     # Initial the data
     model_name = "Unknown module"
+    record_region = "Unknown region"
     country_code = "Unknown country code"
     radio_band = "Unknown radio band"
     bandwidth = "Unknown bandwidth"
@@ -208,9 +220,20 @@ def data_processing(df, log_enabled):
         # data = dfv2.iloc[index].values
         # print(">>>Index[{}] '{}'".format(index, data))
         record_model_name = df['Model'][y]
-        record_country_code = normalize_country_code(df['Region'][y])
+        record_region = df['Region'][y]
+        #record_country_code = normalize_country_code(df['Region'][y])
+        record_country_code = df['CountryCode'][y]
         record_radio_band = df['Radio'][y]
         record_bandwidth = df['Bandwidth'][y]
+
+        # Notice:Ignore the line with no country code content
+        if type(record_country_code) == float:
+            if math.isnan(record_country_code):
+                if log_enabled:
+                    print("=>Record({}-{}):{} Warning:CountryCode is NULL".format(processed_num, y, df.values[y]))
+                continue
+        else:
+            print(f"=>Record({processed_num}-{y}):CountryCode {record_country_code}")
 
         # Construct 'Channel and Max Tx power list'
         ChannelAndMaxTxPower_List = single_record_processing(df, y, False)
@@ -287,7 +310,7 @@ def main(log_enabled):
 
     df = load_file(FILE_SOURCE, SHEET_NAME, False)
     df_format = format_preprocessing(df, False)
-    data_processing(df_format, False)
+    data_processing(df_format, True)
     if log_enabled:
         print("### ~~~~~~ Exit: " + inspect.stack()[0][3] + " ~~~~~~~ ###")
 
