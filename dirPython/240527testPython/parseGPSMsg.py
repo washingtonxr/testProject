@@ -64,7 +64,7 @@ def parse_gpgsv(sentence):
     message_number = int(parts[2]) if len(parts) > 2 else None
     num_satellites = int(parts[3]) if len(parts) > 3 else None
     satellites = []
-    
+    print(len(parts))
     for i in range(4, len(parts) - 1, 4):
         satellite = {
             'satellite_id': parts[i] if len(parts) > i else None,
