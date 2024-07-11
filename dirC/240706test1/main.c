@@ -39,11 +39,11 @@ int loadData(char * pFileName, tDatabaseInfo * pDatabase)
     while (fscanf(file, "%lf", &pDatabase->data[i].value) != EOF) {
         pDatabase->data[i].index = i;
         pDatabase->data[i].isOriginal = true;
-        pDatabase->data[i].coordinate_x = i%MATRIX_SIZE;
+        pDatabase->data[i].coordinate_x = i%MATRIX_SIZE + 1;
         if (0 == pDatabase->data[i].coordinate_x && MATRIX_SIZE <= pDatabase->data[i].index) {
             pDatabase->columnNumber++;
         }
-        pDatabase->data[i].coordinate_y = pDatabase->columnNumber;
+        pDatabase->data[i].coordinate_y = pDatabase->columnNumber + 1;
 
         i++;
         if (i >= MAX_SIZE) {
@@ -131,7 +131,7 @@ int main(int argc, char ** argv) {
 
     printf("TargetValue %f, precision %f\n", targetValue, precision);
 
-    loadData("dataOriginal2.txt", &tDatabase);
+    loadData("./dataOutput/20240711data2.txt", &tDatabase);
     calculateExtendedData(&tDatabase, targetValue, precision);
 
     return 0;

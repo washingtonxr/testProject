@@ -31,11 +31,11 @@ function tDatabase = loadData(fileName, tDatabase, MATRIX_SIZE, MAX_SIZE)
             tDatabase.data(i+1).value = value;
             tDatabase.data(i+1).index = i;
             tDatabase.data(i+1).isOriginal = true;
-            tDatabase.data(i+1).coordinate_x = mod(i, MATRIX_SIZE);
+            tDatabase.data(i+1).coordinate_x = mod(i, MATRIX_SIZE) + 1;
             if tDatabase.data(i+1).coordinate_x == 0 && MATRIX_SIZE <= tDatabase.data(i+1).index
                 columnNumber = columnNumber + 1;
             end
-            tDatabase.data(i+1).coordinate_y = columnNumber;
+            tDatabase.data(i+1).coordinate_y = columnNumber + 1;
             i = i + 1;
         end
     end
