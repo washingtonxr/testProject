@@ -1,7 +1,7 @@
 function main(targetValue, precision)
     % Define constants
-    MAX_SIZE = 100;
-    MATRIX_SIZE = 8;
+    MAX_SIZE = 1000;
+    MATRIX_SIZE = 5;
 
     % Initialize the database structure
     tDatabase.data = repmat(struct('coordinate_x', 0, 'coordinate_y', 0, 'index', 0, 'value', 0, 'isOriginal', false), 1, MAX_SIZE);
@@ -9,7 +9,7 @@ function main(targetValue, precision)
     tDatabase.columnNumber = 0;
 
     % Load data from the file
-    tDatabase = loadData('dataOriginal2.txt', tDatabase, MATRIX_SIZE, MAX_SIZE);
+    tDatabase = loadData('20240711data2.txt', tDatabase, MATRIX_SIZE, MAX_SIZE);
 
     % Calculate extended data
     calculateExtendedData(tDatabase, targetValue, precision);
@@ -32,7 +32,7 @@ function tDatabase = loadData(fileName, tDatabase, MATRIX_SIZE, MAX_SIZE)
             tDatabase.data(i+1).index = i;
             tDatabase.data(i+1).isOriginal = true;
             tDatabase.data(i+1).coordinate_x = mod(i, MATRIX_SIZE) + 1;
-            if tDatabase.data(i+1).coordinate_x == 0 && MATRIX_SIZE <= tDatabase.data(i+1).index
+            if tDatabase.data(i+1).coordinate_x == 1 && MATRIX_SIZE <= tDatabase.data(i+1).index
                 columnNumber = columnNumber + 1;
             end
             tDatabase.data(i+1).coordinate_y = columnNumber + 1;

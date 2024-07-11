@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <math.h>
 
-#define MAX_SIZE 100
-#define MATRIX_SIZE 8
+#define MAX_SIZE 1000
+#define MATRIX_SIZE 5
 
 #pragma pack(4)
 typedef struct dataInfo_t{
@@ -40,7 +40,7 @@ int loadData(char * pFileName, tDatabaseInfo * pDatabase)
         pDatabase->data[i].index = i;
         pDatabase->data[i].isOriginal = true;
         pDatabase->data[i].coordinate_x = i%MATRIX_SIZE + 1;
-        if (0 == pDatabase->data[i].coordinate_x && MATRIX_SIZE <= pDatabase->data[i].index) {
+        if (1 == pDatabase->data[i].coordinate_x && MATRIX_SIZE <= pDatabase->data[i].index) {
             pDatabase->columnNumber++;
         }
         pDatabase->data[i].coordinate_y = pDatabase->columnNumber + 1;
