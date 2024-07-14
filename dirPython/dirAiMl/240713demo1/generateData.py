@@ -118,6 +118,7 @@ def clean_and_prepare_data(data):
     return train_loader, test_loader, device
 
 def develop_the_model(device):
+    print(f"device = {device}")
     class LogClassifier(nn.Module):
         def __init__(self):
             super(LogClassifier, self).__init__()
@@ -135,11 +136,12 @@ def develop_the_model(device):
             x = self.softmax(self.fc4(x))
             return x
 
-    # Initialize the model
-    #model = LogClassifier()
-
-    # Initialize the model and move it to the GPU
-    model = LogClassifier().to(device)
+    if device != "cpu":
+        # Initialize the model
+        model = LogClassifier()
+    else:
+        # Initialize the model and move it to the GPU
+        model = LogClassifier().to(device)
     return model
 
 def training_the_model(model, train_loader):
