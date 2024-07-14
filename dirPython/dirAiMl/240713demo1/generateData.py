@@ -89,6 +89,9 @@ def gather_prepare_data(dataFile):
     return data
 
 def clean_and_prepare_data(data):
+    # Check if CUDA is available
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     # Example feature extraction (converting categorical to numerical)
     label_encoder = LabelEncoder()
     data['error_code_encoded'] = label_encoder.fit_transform(data['error_code'])
@@ -112,9 +115,9 @@ def clean_and_prepare_data(data):
     train_loader = DataLoader(train_dataset, batch_size=2, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=2, shuffle=False)
 
-    return train_loader, test_loader
+    return train_loader, test_loader, device
 
-def develop_the_model():
+def develop_the_model(device):
     class LogClassifier(nn.Module):
         def __init__(self):
             super(LogClassifier, self).__init__()
@@ -133,7 +136,10 @@ def develop_the_model():
             return x
 
     # Initialize the model
-    model = LogClassifier()
+    #model = LogClassifier()
+
+    # Initialize the model and move it to the GPU
+    model = LogClassifier().to(device)
     return model
 
 def training_the_model(model, train_loader):
@@ -176,8 +182,8 @@ if __name__ == "__main__":
 
     data_file = os.path.join(path_file_current, DATA_FILE_PATH, DATA_FILE_NAME)
     data = gather_prepare_data(data_file)
-    train_loader, test_loader = clean_and_prepare_data(data)
-    model = develop_the_model()
+    train_loader, test_loader, device = clean_and_prepare_data(data)
+    model = develop_the_model(device)
     training_the_model(model, train_loader)
     evaluating_the_model(model)
 
