@@ -76,6 +76,15 @@ def generate_log_data2(source_path):
     })
 
     # Save to CSV
+    import shutil
+    folder_path= os.path.join(source_path, DATA_FILE_PATH)
+    if not os.path.exists(folder_path):
+        os.mkdir(folder_path)
+    else:
+        if os.path.exists(folder_path):
+            shutil.rmtree(folder_path) # remove the directory and its contents
+            os.mkdir(folder_path) # recreate the directory
+
     csv_path = file_input = os.path.join(source_path, DATA_FILE_PATH, DATA_FILE_NAME)
     large_data.to_csv(csv_path, index=False)
     print(csv_path)
