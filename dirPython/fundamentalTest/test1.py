@@ -157,6 +157,33 @@ print(random.shuffle(items))
 z = frozenset(range(100))
 print(z)
 
+a = 4
+a1 = 4.11111111
+A = "Sally"
+#A will not overwrite a 
+
+print(type(a))
+print(type(a1))
+print(type(A))
+
+from decimal import Decimal
+print(Decimal(2.675))
+
+from fractions import Fraction
+print(Fraction(1, 3**100))
+
+fraction = 0.0
+for c in range(1,1000):
+    fraction = 0.02*c
+    x = 0.0
+    total = 0.0
+    for i in range(1,30):
+        y = fraction**i
+        #print(f"y={y}")
+        x = 1/y
+        total += x
+        #print(f"i={i}:x(1)/y({y})={x}, total={total}")
+    print(f"{fraction}->{total}")
 
 
 # End of this file.
