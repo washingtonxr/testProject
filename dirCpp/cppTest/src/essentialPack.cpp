@@ -960,7 +960,22 @@ int forOperator(void)
        cout << "a 的值：" << a << endl;
        a++;
    }
- 
+#if 1
+   int v[] = {0,1,2,3,4,5,6,7,8,9};
+   for (auto i:v)
+#else
+   for (auto i:{0,1,2,3})
+#endif
+   {
+      /* code */
+      cout << "i = " << i << endl;
+   }
+
+   for (auto& i:v)
+   {
+      cout << "i = " << i << endl;
+   }
+
    return 0;
 }
 
