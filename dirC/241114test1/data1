@@ -1,0 +1,26 @@
+ ETSI    ax ac
+dfs_domain:3
+oper_ch=116, oper_bw=2, oper_ch_offet=1
+======================
+ch  freq non_ocp cac flags
+ 36 5180    0    0
+ 40 5200    0    0
+ 44 5220    0    0
+ 48 5240    0    0
+ 52 5260    0    0 DFS
+ 56 5280    0    0 DFS
+ 60 5300    0    0 DFS
+ 64 5320    0    0 DFS
+100 5500    0    0 DFS
+104 5520    0    0 DFS
+108 5540    0    0 DFS
+112 5560    0    0 DFS
+116 5580    0  333 DFS
+120 5600    0  333 DFS
+124 5620    0  333 DFS
+128 5640    0  333 DFS
+132 5660    0    0 DFS
+136 5680    0    0 DFS
+140 5700    0    0 DFS
+total ch number:19
+
