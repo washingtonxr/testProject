@@ -2,114 +2,97 @@
 # -*- coding: UTF-8 -*-
 
 '''
-Python crawls all 3GPP specificition documents from 3GPP official webside
-The crawled .zip files are http://www.3gpp.org/ftp/Specs/latest/Rel-16/ according to the 3GPP website
+Python script to crawl all 3GPP specification documents from the 3GPP official website.
+The crawled .zip files are from http://www.3gpp.org/ftp/Specs/latest/Rel-16/ according to the 3GPP website.
 Content is automatically categorized.
 '''
-import urllib.request  # Gets the URL text
-import re, os  # Regular expressions match URLs and .zip files
+
+import urllib.request
+import re
+import os
+import threading
+import ssl
+
+# Create an unverified SSL context
+ssl._create_default_https_context = ssl._create_unverified_context
 
 TS3GPP_URL = "https://www.3gpp.org/ftp/Specs/latest/"
-TSURL_BAIDU = "https://www.baidu.com"
-TSVERSION = "Rel-17"
+TSVERSION = "Rel-19"
 TSFILE_PATH = "./data/"
-#https://www.3gpp.org/ftp/Specs/latest/Rel-17
 
+MAX_THREADS = 8  # Limit the number of concurrent threads
+semaphore = threading.Semaphore(MAX_THREADS)
 
-'''
-Callback function
-@a: Blocks of data that have already been downloaded
-@b: The size of the data block
-@c: The size of the remote file
-'''
 def downloadStatistics(a, b, c):
-    percentage = 100.0*a*b/c
-    if percentage > 100:
-        percentage = 100
+    """Callback function to display download progress."""
+    percentage = min(100.0 * a * b / c, 100)
     print('%.2f%%' % percentage)
 
+def download_file(remote_url, local_path):
+    """Download a file from a remote URL to a local path."""
+    try:
+        if os.path.exists(local_path):
+            print(f"File already exists: {local_path}")
+            return
+        print(f"Downloading: {remote_url} -> {local_path}")
+        urllib.request.urlretrieve(remote_url, local_path, downloadStatistics)
+        file_size = os.path.getsize(local_path) / (1024 * 1024)
+        print(f"Downloaded {local_path} (Size: {file_size:.2f} MB)")
+    except Exception as e:
+        print(f"Error downloading {remote_url}: {e}")
+
+def download_file_with_limit(remote_url, local_path):
+    """Wrapper function to limit the number of concurrent downloads."""
+    with semaphore:
+        download_file(remote_url, local_path)
 
 def getSpecs(inputURL, inputPath):
+    """Crawl and download 3GPP specification documents."""
+    try:
+        with urllib.request.urlopen(inputURL) as f:
+            contentNet = f.read().decode('utf-8')
+    except Exception as e:
+        print(f"Error accessing URL {inputURL}: {e}")
+        return
 
-    # Crawl web page content saved to a conentNet string.
-    with urllib.request.urlopen(inputURL) as f:
-        contentNet = f.read().decode('utf-8')
-    # Parse all series of specifications like: ['/21_series','/22_series'.....'/55_series']
+    # Parse series directories
     list_Parser = re.findall(r'/[0-9]{2}.series', contentNet)
-    print(list_Parser)
-    # Resolves to the ABSOLUTE URL of all .zip files
-    list_path = []
-    list_File = []
-    list_Zip = []
+    print(f"Found series: {list_Parser}")
+
+    # Prepare directories and URLs
     list_URL = []
-    for i in list_Parser:
-        i2 = i.strip('/')
-        list_File.append(i2)
+    for series in list_Parser:
+        series_name = series.strip('/')
+        series_url = inputURL + series_name
+        series_dir = os.path.join(inputPath, TSFILE_PATH.strip('./'), TSVERSION, series_name)
 
-    for i in list_Parser:
-        print(i)
-        i2 = inputURL + i.strip('/')
-        list_path.append(i2)
+        if not os.path.exists(series_dir):
+            print(f"Creating directory: {series_dir}")
+            os.makedirs(series_dir)
 
-    for i in list_path:
-        print(i)
-        with urllib.request.urlopen(i) as f:
-            contentURL = f.read().decode('utf-8')
-        list_Zip = re.findall(r'/[0-9]{5}.*?\.zip', contentURL)
-        for m_zip in list_Zip:
-            print(m_zip)
-            i2 = i + m_zip
-            list_URL.append(i2)
-    # Create a serials folder if the file does not exist.
-    for i in list_File:
-        print("Directory name:" + i)
-    #    if not os.path.exists("D:\\TEST[Jan.20th,2020-XXX.XXth,XXXX]\\Standards\\3GPP\\" + TSVERSION + "\\" + i):
-    #        os.makedirs("D:\\TEST[Jan.20th,2020-XXX.XXth,XXXX]\\Standards\\3GPP\\" + TSVERSION + "\\" + i)
-        thisDirectory = TSFILE_PATH + TSVERSION + '/' + i
-        if not os.path.exists(thisDirectory):
-            print("Make directory:" + thisDirectory)
-            os.makedirs(thisDirectory)
-    # Download all .zip files to the specified folder...
+        try:
+            with urllib.request.urlopen(series_url) as f:
+                contentURL = f.read().decode('utf-8')
+            zip_files = re.findall(r'/[0-9]{5}.*?\.zip', contentURL)
+            for zip_file in zip_files:
+                file_url = series_url + zip_file
+                local_file_path = os.path.join(series_dir, zip_file.split('/')[-1])
+                list_URL.append((file_url, local_file_path))
+        except Exception as e:
+            print(f"Error accessing series URL {series_url}: {e}")
 
-    #index = 0
-    for remoteFileInfo in list_URL:
-        print('Handling file:' + remoteFileInfo)
+    # Download files using threads with a limit
+    threads = []
+    for remote_url, local_path in list_URL:
+        thread = threading.Thread(target=download_file_with_limit, args=(remote_url, local_path))
+        threads.append(thread)
+        thread.start()
 
-        # Require file name.
-        fileName = remoteFileInfo.split('/')[-1]
-        # D:\TEST[Jan.20th,2020-XXX.XXth,XXXX]\Standards\3GPP
-    #    os.chdir('D:/TEST[Jan.20th,2020-XXX.XXth,XXXX]/Standards/3GPP/' + TSVERSION + '/' + i.split('/')[-2])
-
-        subDirectory = inputPath + TSFILE_PATH.split('.')[1] + TSVERSION + '/' + remoteFileInfo.split('/')[-2]
-        print("Change to the directory:" + subDirectory)
-        os.chdir(subDirectory)
-
-        fileInfo = remoteFileInfo.split('/')[-1]
-        # Support resumable download;
-        if os.path.exists(fileInfo):
-            continue
-        else:
-            urllib.request.urlretrieve(remoteFileInfo, fileInfo, downloadStatistics)
-        # LocalPath = os.path.join('D:/TEST[Jan.20th,2020-XXX.XXth,XXXX]/Standards/3GPP/r15/', list_File[index])
-        # index = index + 1
-        # urllib.request.urlretrieve(i, LocalPath)
-
-        # Require file size.
-        fileSize = os.path.getsize(os.path.join(subDirectory, fileInfo))
-        # Change fileSize's unit to MB.
-        print('File size = %.2f Mb' % (fileSize/1024/1024))
-
-    # TODO imports thread modules to enable multithreading to solve the problem of slow single-threaded downloads.
+    for thread in threads:
+        thread.join()
 
 if __name__ == '__main__':
-
-    # Set the default URL and path.
     targetURL = TS3GPP_URL + TSVERSION + '/'
     rootPath = os.getcwd()
-
     getSpecs(targetURL, rootPath)
     print("The end.")
-else:
-    print("Shoud not come to here.")
-
-#End of this file.
